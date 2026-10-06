@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
+import { timingSafeEqual } from "node:crypto";
 import test from "node:test";
 import { handleMcp } from "../src/api/mcp";
 import type { Env } from "../src/types";
+
+// Cloudflare Workers exposes this Web Crypto helper; Node's Web Crypto does not.
+(crypto.subtle as any).timingSafeEqual = (a: Uint8Array, b: Uint8Array) => timingSafeEqual(a, b);
 
 const env = {
   DB: {} as D1Database,
