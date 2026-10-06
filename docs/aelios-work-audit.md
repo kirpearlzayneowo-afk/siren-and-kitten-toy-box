@@ -87,3 +87,12 @@ No real chat content was read or imported during this audit. A safe future valid
 ## Audit limitations
 
 This report is evidence-based against the private remote’s single `main` commit and upstream `main` commit listed above. It does not claim that the private repository has no unpushed/local files, that any Worker is deployed, that GPT Work can connect, or that real MCP inference succeeds. No OB data, private real-chat content, deployment, account operation, or source modification other than this report was performed.
+
+## 2026-10-07 restricted implementation evidence
+
+- The private repository was cloned into the current session checkout and a new branch `audit/aelios-current` was created from private `main` `cfee873a1bc6420be2c3e128d3ef28bcb47cb9b6`. The pre-existing report was copied unchanged before import and remains at this path.
+- Aelios was fetched as remote `upstream/main` at `2a9f636bc1879fe0bf1486cd9152adb282272388`.
+- Import used an `aelios/` tree prefix, so the private repository's root `README.md` and history remain intact while Aelios' original internal paths, including `aelios/LICENSE`, `aelios/src/`, `aelios/migrations/`, `aelios/tests/`, and `aelios/wrangler.toml`, are preserved. The import contains 185 upstream files.
+- The import commit is `739e7e4c60dabe187b32216bf251eab1725a08de`, with parents `cfee873a1bc6420be2c3e128d3ef28bcb47cb9b6` and `2a9f636bc1879fe0bf1486cd9152adb282272388`. Both private and upstream commits are ancestors of the branch HEAD, preserving upstream history without merging into `main`.
+- Non-deployment checks passed: branch name, clean status after commit, presence of `aelios/LICENSE`, `aelios/src/api/mcp.ts`, and this report, 185 imported Aelios paths, and ancestor checks for both parents. No dependencies were installed, no service was started, no Cloudflare operation was run, and no real chat or OB content was accessed.
+- GPT Work MCP integration, live deployment, authentication behavior against a real endpoint, and real inference remain unverified exactly as stated above.
