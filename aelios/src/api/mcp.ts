@@ -120,8 +120,22 @@ const READ_ONLY = { readOnlyHint: true, openWorldHint: false };
 // Reads that also write recall bookkeeping (counters / last-injected timestamps), never memory content.
 const BOOKKEEPING_READ = { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false };
 
+// This endpoint is intentionally read-only for the GPT Work integration branch.
+// Keep the allowlist here, next to tool discovery, so a newly added MCP tool is
+// not exposed until it is explicitly reviewed for read-only behavior.
+export const READ_ONLY_MCP_TOOL_NAMES = new Set([
+  "memory_search",
+  "memory_list",
+  "memory_get",
+  "memory_boot",
+  "memory_recall",
+  "diary_get"
+]);
+
+const READ_ONLY_TOOL_ERROR = "Tool is disabled or unavailable in read-only MCP mode";
+
 function getTools(): Array<Record<string, unknown>> {
-  return [
+  const tools: Array<Record<string, unknown>> = [
     {
       name: "memory_search",
       description:
@@ -508,6 +522,10 @@ function getTools(): Array<Record<string, unknown>> {
       }
     }
   ];
+
+  return tools.filter(
+    (tool) => typeof tool.name === "string" && READ_ONLY_MCP_TOOL_NAMES.has(tool.name)
+  );
 }
 
 async function callTool(
@@ -516,6 +534,9 @@ async function callTool(
   profile: KeyProfile,
   params: ToolCallParams
 ): Promise<Record<string, unknown>> {
+  const toolName = typeof params.name === "string" ? params.name : "";
+  if (!READ_ONLY_MCP_TOOL_NAMES.has(toolName)) return toolError(READ_ONLY_TOOL_ERROR);
+
   const args = isRecord(params.arguments) ? params.arguments : {};
 
   if (params.name === "memory_search") {

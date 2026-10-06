@@ -96,3 +96,9 @@ This report is evidence-based against the private remote’s single `main` commi
 - The import commit is `739e7e4c60dabe187b32216bf251eab1725a08de`, with parents `cfee873a1bc6420be2c3e128d3ef28bcb47cb9b6` and `2a9f636bc1879fe0bf1486cd9152adb282272388`. Both private and upstream commits are ancestors of the branch HEAD, preserving upstream history without merging into `main`.
 - Non-deployment checks passed: branch name, clean status after commit, presence of `aelios/LICENSE`, `aelios/src/api/mcp.ts`, and this report, 185 imported Aelios paths, and ancestor checks for both parents. No dependencies were installed, no service was started, no Cloudflare operation was run, and no real chat or OB content was accessed.
 - GPT Work MCP integration, live deployment, authentication behavior against a real endpoint, and real inference remain unverified exactly as stated above.
+
+## 2026-10-07 read-only MCP implementation
+
+On branch `work/read-only-mcp`, the MCP surface is restricted by an explicit allowlist. `tools/list` exposes only `memory_search`, `memory_list`, `memory_get`, `memory_boot`, `memory_recall`, and `diary_get`. `tools/call` rejects all other names, including `memory_ingest`, `memory_export`, `memory_delete`, `memory_upsert`, `memory_supersede`, `memory_archive`, `memory_pin`, `memory_create`, and `glossary_set`, before argument parsing or storage access. The change is in `aelios/src/api/mcp.ts`; coverage is in `aelios/tests/mcp-read-only.test.ts`.
+
+The test is protocol-level and uses a synthetic request plus a stub environment; it does not read or write real D1 data. Dependencies were not installed, so execution of the TypeScript test remains an environment limitation until an existing dependency runtime is available. GPT Work registration, deployment, live MCP handshake, and real inference remain unverified.
