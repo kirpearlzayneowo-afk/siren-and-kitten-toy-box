@@ -37,19 +37,22 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--
 <button type="button" role="tab" id="tab-tidy" aria-controls="content" aria-selected="false" data-tab="tidy"><span class="emoji">🧹</span>收拾床铺</button>
 </nav>
 <a class="arcade-link" href="./arcade.html">🎠 猫猫游乐厅 <span>弹珠机 · 小鱼套圈圈 →</span></a>
-<a class="arcade-link" href="./pomodoro.html">🍅 沈砚的番茄钟 <span>专注、暂停、喝水歇歇 →</span></a>
+<a class="arcade-link" href="./pomodoro.html">🍅 沈砚的番茄钟 <span>专注一轮 · 赚罐罐 →</span></a>
+<a class="arcade-link" href="./qi.html">👾 小祈的小窝 <span>开罐喂养 · 摇滚紫怪物 →</span></a>
 <section class="panel" id="content" role="tabpanel" aria-labelledby="tab-art" aria-live="polite"></section>
 <div class="storage" aria-label="存档管理"><button id="backup" type="button">📤 导出存档</button><button id="restore" type="button">📥 导入存档</button><input class="sr-input" id="backup-file" type="file" accept=".json,application/json" aria-label="选择猫猫宇宙存档"></div><div id="storage-status" class="status" role="status" aria-live="polite"></div>
 <footer class="footer">没有连续打卡惩罚，也没有欠下的任务。猫猫想玩就来。<br>SIREN · CATVERSE · 番茄钟与小游戏的完成次数也会存档</footer>
 </main>
+<script src="./pet.js"></script>
 <script>
 (function(){
 "use strict";
-const KEY="siren-catverse-v1";
+const KEY="siren-catverse-v1",pet=window.CatversePet;
 const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[],tidyDate:"",tidyDone:[],arcadeBest:{pin:0,fish:0},pomoTotal:0,pomoToday:0,pomoDate:""};
 let state={...defaults,claimed:{},charges:[],tidyDone:[]};
 try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object"){state={...defaults,...saved,claimed:saved.claimed&&typeof saved.claimed==="object"?saved.claimed:{},charges:Array.isArray(saved.charges)?saved.charges:[]};}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.querySelector(".footer").textContent="浏览器不允许保存数据；当前页面可以玩，但刷新后进度可能丢失。";}}
+function syncPomo(){try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(d&&typeof d==="object"){state.pomoTotal=safeInt(d.pomoTotal,0,1000000,0);state.pomoToday=safeInt(d.pomoToday,0,1000000,0);state.pomoDate=typeof d.pomoDate==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(d.pomoDate)?d.pomoDate:"";}}catch(e){}}
+function save(){try{syncPomo();localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.querySelector(".footer").textContent="浏览器不允许保存数据；当前页面可以玩，但刷新后进度可能丢失。";}}
 const tasks=[{id:"face",icon:"✏️",name:"三庭五眼练习",desc:"认真画完一张结构练习",xp:15},{id:"skull",icon:"💀",name:"头骨转面",desc:"把脑袋转过来，不许脑壳逃跑",xp:25},{id:"doodle",icon:"🌷",name:"自由涂鸦",desc:"画一个你自己喜欢的小东西",xp:10}];
 const clothes={
 lolita:[["🎀","暮色茶会","雾蓝 · 奶油白 · 灰粉","复古洋装 + 蕾丝衬衫 + 小皮鞋","像从旧书页里走出来。"],["🍓","山楂奶霜","莓粉 · 燕麦白 · 深棕","高腰裙 + 灯笼袖 + 丝绒发饰","酸酸甜甜的小猫专属。"],["🦢","月光标本","银灰 · 灰蓝 · 珍珠白","长裙 + 珍珠发夹 + 短披肩","适合安静又漂亮的插画。"]],
@@ -141,7 +144,8 @@ else if(b.hasAttribute("data-tidy-back")){if(state.tidyDone.length){state.tidyDo
 function status(message){$("storage-status").textContent=message;}
 $("backup").addEventListener("click",()=>{
 try{
-const data=JSON.stringify({app:"siren-catverse",format:2,savedAt:new Date().toISOString(),state:cleanState(state)},null,2);
+syncPomo();
+const data=JSON.stringify({app:"siren-catverse",format:2,savedAt:new Date().toISOString(),state:cleanState(state),pet:pet.load()},null,2);
 const blob=new Blob([data],{type:"application/json;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");
 link.href=url;link.download="catverse-save-"+today()+".json";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
 status("已请求下载存档。记得把 JSON 文件保存到安全的位置。");
@@ -154,9 +158,12 @@ try{
 if(file.size>100000)throw new Error("存档文件太大啦（上限 100 KB）。");
 const data=JSON.parse(await file.text());
 if(data?.app!=="siren-catverse"||data?.format!==2)throw new Error("这不是 CATVERSE v0.2 导出的存档。");
-const incoming=cleanState(data.state);
+const incoming=cleanState(data.state),incomingPet=pet.clean(data.pet);
 if(!confirm("确定导入这个存档吗？这会覆盖当前浏览器里的游戏进度，建议先导出备份。")){status("取消导入，原存档完好。");return;}
-localStorage.setItem(KEY,JSON.stringify(incoming));state=incoming;render();status("导入成功 ♡ 画画、衣柜、扭蛋和睡前任务的存档已恢复。");
+const beforeShared=localStorage.getItem(KEY),beforePet=localStorage.getItem(pet.KEY);
+try{localStorage.setItem(KEY,JSON.stringify(incoming));if(!pet.store(incomingPet))throw new Error("小祈存档写入失败。");}
+catch(writeError){if(beforeShared===null)localStorage.removeItem(KEY);else localStorage.setItem(KEY,beforeShared);if(beforePet===null)localStorage.removeItem(pet.KEY);else localStorage.setItem(pet.KEY,beforePet);throw writeError;}
+state=incoming;render();status("导入成功 ♡ 画室、游戏厅、番茄钟完成次数及小祈罐罐都已恢复。");
 }catch(err){status("未导入：" + (err instanceof Error?err.message:"文件无法读取。"));}
 finally{e.target.value="";}
 });
