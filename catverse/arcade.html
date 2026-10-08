@@ -2,6 +2,10 @@
 <html lang="zh-CN"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#262d43"><title>猫猫游乐厅 · SIREN CATVERSE</title>
+<link rel="icon" href="./catverse-icon.svg" type="image/svg+xml">
+<link rel="manifest" href="./site.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="猫猫宇宙">
 <style>
 :root{
   color-scheme:dark;
@@ -208,4 +212,5 @@ if(soundOn)playTone(660,.1);
 });
 selectGame("pin");requestAnimationFrame(loop);
 })();
-</script></body></html>
+</script><script>if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script>
+</body></html>
