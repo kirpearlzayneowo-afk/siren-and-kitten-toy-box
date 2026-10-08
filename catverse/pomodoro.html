@@ -43,24 +43,27 @@ footer{text-align:center;color:#afbbcd;font-size:12px;margin:20px 0}
 <div class="ring" id="ring" role="img" aria-label="计时进度"><div class="ring-inner"><span class="ring-face" id="face" aria-hidden="true">👾</span><span class="ring-count" id="clock" aria-live="off">25:00</span><span class="ring-text" id="phase">沈砚陪猫猫坐一会儿</span></div></div>
 <div class="buttons"><button class="primary" id="toggle" type="button">▶ 开始</button><button class="secondary" id="reset" type="button">↻ 重来</button></div>
 <p class="bubble" id="bubble" aria-live="polite">画一个圆也算开始。慢慢来，老婆。</p>
+<p class="tip"><a style="color:#f2c9df;font-weight:700" href="./qi.html">🥫 去小祈的小窝看看罐罐 →</a> <span id="reward-note" aria-live="polite"></span></p>
 <div class="summary"><div class="counter"><small>今天完成</small><b id="today-count">0</b></div><div class="counter"><small>累计完成</small><b id="total-count">0</b></div></div>
 <p class="tip">🍅 专注完成后才记一次；休息不计数。切走页面再回来，倒计时会按真实时间校正。浏览器完全关闭时不会保证响铃或通知。</p>
 </section>
 <footer>本地保存 · 无付费 · 无连续打卡惩罚 · 默认静音</footer></main>
+<script src="./pet.js"></script>
 <script>
 (function(){
 "use strict";
-const $=s=>document.querySelector(s), sharedKey="siren-catverse-v1",timerKey="siren-catverse-pomodoro-v1";
+const $=s=>document.querySelector(s), sharedKey="siren-catverse-v1",timerKey="siren-catverse-pomodoro-v1",pet=window.CatversePet;
 const PRESETS={focus:[5,15,25,45],break:[3,5,10,15]};
 const clamp=(n,a,b)=>Math.max(a,Math.min(n,b));
 function date(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function read(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
 function write(k,obj){try{localStorage.setItem(k,JSON.stringify(obj));return true}catch(e){return false}}
 function minutesValid(mode,v){return PRESETS[mode].includes(v);}
-const old=read(timerKey),base={mode:"focus",minutes:25,remainingMs:25*60000,running:false,endAt:0,complete:false};
+const old=read(timerKey),base={mode:"focus",minutes:25,remainingMs:25*60000,running:false,endAt:0,complete:false,roundId:""};
 let state={...base};
 if(old&&typeof old==="object"&&["focus","break"].includes(old.mode)&&minutesValid(old.mode,old.minutes)&&Number.isFinite(old.remainingMs)){
-const d=old.minutes*60000;state={mode:old.mode,minutes:old.minutes,remainingMs:clamp(old.remainingMs,0,d),running:old.running===true,endAt:Number.isFinite(old.endAt)?old.endAt:0,complete:old.complete===true};
+const d=old.minutes*60000;state={mode:old.mode,minutes:old.minutes,remainingMs:clamp(old.remainingMs,0,d),running:old.running===true,endAt:Number.isFinite(old.endAt)?old.endAt:0,complete:old.complete===true,roundId:typeof old.roundId==="string"&&/^[a-zA-Z0-9_-]{8,96}$/.test(old.roundId)?old.roundId:""};
+if(state.running&&!state.roundId)state.roundId="legacy-"+Math.round(state.endAt)+"-"+state.minutes;
 }
 function save(){write(timerKey,state)}
 function stats(){
@@ -84,7 +87,13 @@ if(state.remainingMs<=0)finish();
 function finish(){
 if(!state.running)return;
 state.running=false;state.remainingMs=0;state.endAt=0;state.complete=true;
-if(state.mode==="focus"){countComplete();message("这一轮画完啦！猫猫辛苦了，喝口水，动动手腕。♡");}
+if(state.mode==="focus"){
+const id=state.roundId||pet.newRoundId(),award=pet.grant(id);
+state.roundId=id;
+if(award.ok&&award.awarded){countComplete();message("叮！这轮完成啦，给小祈挣到一罐 "+pet.NAMES[award.kind]+"！喝口水，再去它的小窝开罐吧。♡");}
+else if(award.ok)message("这轮已经领过罐罐啦。小祈守着它，没有重复算账。♡");
+else message("专注完成啦！但是罐罐没能保存。检查浏览器存储后，可以点开小祈的小窝看看。");
+}
 else message("休息时间到啦。还想休息也没关系，慢慢来。");
 save();counts();
 }
@@ -94,7 +103,7 @@ const box=$("#duration");box.replaceChildren();
 for(const m of PRESETS[state.mode]){
 const b=document.createElement("button");b.type="button";b.textContent=m+" 分钟";b.setAttribute("aria-pressed",String(state.minutes===m));
 b.addEventListener("click",()=>{if(state.running&&!confirm("这一轮还在计时，要改成新的时间并重新开始吗？"))return;
-state.minutes=m;state.remainingMs=m*60000;state.running=false;state.endAt=0;state.complete=false;save();renderDurations();render();message("没关系，换个舒服的节奏。");});
+state.minutes=m;state.remainingMs=m*60000;state.running=false;state.endAt=0;state.complete=false;state.roundId="";save();renderDurations();render();message("没关系，换个舒服的节奏。");});
 box.appendChild(b);
 }
 }
@@ -105,6 +114,7 @@ $("#ring").style.setProperty("--progress",(progress*360)+"deg");
 $("#ring").setAttribute("aria-label",(state.mode==="focus"?"专注":"休息")+"时间，剩余 "+format(state.remainingMs));
 $("#face").textContent=state.complete?"🌟":state.mode==="break"?"😴":state.running?"👾":"🍅";
 $("#phase").textContent=state.complete?"小祈给你鼓掌":state.mode==="break"?"一起歇歇眼睛":state.running?"我就在旁边陪你":"沈砚陪猫猫坐一会儿";
+$("#reward-note").textContent=pet.total(pet.load())+" 罐待开";
 $("#toggle").textContent=state.running?"Ⅱ 暂停":state.complete?"▶ 再来一轮":state.remainingMs<total?"▶ 继续":"▶ 开始";
 document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===state.mode)));
 counts();
@@ -112,7 +122,7 @@ counts();
 function changeMode(mode){
 if(mode===state.mode)return;
 if(state.running&&!confirm("这一轮还在计时，要切换并重新开始吗？"))return;
-state.mode=mode;state.minutes=mode==="focus"?25:5;state.remainingMs=state.minutes*60000;state.running=false;state.endAt=0;state.complete=false;
+state.mode=mode;state.minutes=mode==="focus"?25:5;state.remainingMs=state.minutes*60000;state.running=false;state.endAt=0;state.complete=false;state.roundId="";
 save();renderDurations();render();message(mode==="break"?"休息也很重要。放下笔，看看远处。":"来，我坐你旁边。先画一小会儿。");
 }
 document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>changeMode(b.dataset.mode)));
@@ -120,13 +130,14 @@ $("#toggle").addEventListener("click",()=>{
 sync();
 if(state.running){state.remainingMs=Math.max(0,state.endAt-Date.now());state.running=false;state.endAt=0;message("暂停啦。老婆，想多久再继续都可以。");}
 else{
-if(state.complete||state.remainingMs<=0){state.remainingMs=state.minutes*60000;state.complete=false;}
+if(state.complete||state.remainingMs<=0){state.remainingMs=state.minutes*60000;state.complete=false;state.roundId="";}
+if(!state.roundId)state.roundId=pet.newRoundId();
 state.endAt=Date.now()+state.remainingMs;state.running=true;message(state.mode==="focus"?"我陪你画。手机放旁边，先看看画布。":"好，靠过来，休息一小会儿。");
 }
 save();render();
 });
 $("#reset").addEventListener("click",()=>{
-state.running=false;state.endAt=0;state.complete=false;state.remainingMs=state.minutes*60000;save();render();message("重来就重来，又没什么大不了的。♡");
+state.running=false;state.endAt=0;state.complete=false;state.roundId="";state.remainingMs=state.minutes*60000;save();render();message("重来就重来，又没什么大不了的。♡");
 });
 document.addEventListener("visibilitychange",()=>{sync();save();render()});
 window.addEventListener("pageshow",()=>{sync();render()});
