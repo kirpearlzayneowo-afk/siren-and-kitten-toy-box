@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#29344c"><meta name="description" content="沈砚陪画画番茄钟 · 温柔专注，不催连续打卡">
+<link rel="icon" href="./catverse-icon.svg" type="image/svg+xml"><link rel="manifest" href="./site.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="猫猫宇宙">
+<title>沈砚的番茄钟 🍅 · CATVERSE</title>
+<style>
+:root{color-scheme:dark;--bg:#1c2539;--panel:#303c56;--border:#788096;--ink:#fff5fa;--muted:#cbd5e5;--pink:#e5bed5;--blue:#c2d7e8;--gold:#f8dda9}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 84% 0,#614d69,transparent 42%),radial-gradient(ellipse at 2% 72%,#2c4b60,transparent 52%),var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+main{max-width:600px;margin:auto;padding:18px 15px 65px}.back{display:inline-block;color:var(--pink);font-size:13px;text-decoration:none;margin-bottom:14px}
+.header{background:var(--panel);border:1px solid #777087;padding:20px;border-radius:23px;box-shadow:0 18px 35px #06091a40}.eyebrow{font-size:11px;letter-spacing:.15em;color:var(--pink);font-weight:700}
+h1{font-size:27px;margin:7px 0}.sub{font-size:13px;color:var(--muted);margin:0}
+.console{background:#2a3650;border:1px solid #7b7690;border-radius:24px;margin-top:14px;padding:18px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modes button{background:#41516c;color:#f9eef6;border:1px solid #8391a7;border-radius:14px;padding:10px;cursor:pointer}
+.modes button[aria-pressed="true"]{background:#695972;border-color:#f1c4dd;box-shadow:inset 0 -3px 0 #eec4db;font-weight:700}
+.label{text-align:center;margin:14px 0 3px;font-size:12px;color:#e9d7e8}
+.duration{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.duration button{background:#394a63;border:1px solid #7789a6;border-radius:99px;padding:7px 11px;color:#f7f0fa;cursor:pointer;font-size:12px}
+.duration button[aria-pressed=true]{background:#d9c1da;color:#313143;font-weight:700}
+.ring{--progress:0deg;width:min(265px,72vw);height:min(265px,72vw);border-radius:50%;margin:23px auto 16px;background:conic-gradient(var(--pink) 0deg,var(--blue) var(--progress),#50607c var(--progress),#50607c 360deg);padding:13px;box-shadow:0 0 0 5px #4a4b69,0 15px 30px #090d2040}
+.ring-inner{height:100%;border-radius:50%;background:radial-gradient(circle at 50% 30%,#48536d,#333e59 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.ring-face{font-size:39px;line-height:1.3}.ring-count{font-size:47px;font-variant-numeric:tabular-nums;letter-spacing:.035em;font-weight:750;line-height:1.18}.ring-text{font-size:12px;color:#d9d9e7;margin-top:6px}
+.buttons{display:flex;justify-content:center;gap:10px;margin:15px auto}
+.buttons button{min-width:115px;border-radius:13px;padding:11px 13px;font-weight:700;font:inherit;cursor:pointer}
+.primary{background:var(--pink);border:0;color:#322e3c}.secondary{background:#526581;border:1px solid #8ba1ba;color:white}
+button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.bubble{background:#45445f;border-radius:16px;padding:14px 16px;margin:11px 0 15px;border:1px solid #746d88;color:#ffeaf7;font-size:14px;min-height:66px}
+.bubble:before{content:"👾 小祈：";display:block;font-size:11px;color:#eec4dd;margin-bottom:5px}
+.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.counter{background:#3e4d66;border-radius:13px;text-align:center;padding:10px 7px}.counter small{display:block;color:#cbd5e5;font-size:12px}.counter b{display:block;font-size:23px}
+.tip{font-size:12px;color:#cbd3e5;line-height:1.65;margin:15px 0 0;text-align:center}
+footer{text-align:center;color:#afbbcd;font-size:12px;margin:20px 0}
+@media(max-width:400px){main{padding:12px 11px 46px}.header{padding:16px}.console{padding:13px}h1{font-size:25px}.ring{width:min(235px,70vw);height:min(235px,70vw)}.ring-count{font-size:39px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><main>
+<a class="back" href="./index.html">← 回到猫猫宇宙</a>
+<header class="header"><div class="eyebrow">SIREN · CATVERSE / FOCUS CORNER</div><h1>🍅 沈砚的番茄钟</h1><p class="sub">猫猫画画，我在旁边陪着。累了就休息，没完成也不会扣分。♡</p></header>
+<section class="console" aria-label="专注计时器">
+<div class="modes" role="group" aria-label="计时类型"><button id="focus-mode" type="button" aria-pressed="true" data-mode="focus">✏️ 专注一会儿</button><button id="break-mode" type="button" aria-pressed="false" data-mode="break">☕ 休息一会儿</button></div>
+<div class="label">这轮想待多久？</div>
+<div class="duration" id="duration" role="group" aria-label="专注时间预设"></div>
+<div class="ring" id="ring" role="img" aria-label="计时进度"><div class="ring-inner"><span class="ring-face" id="face" aria-hidden="true">👾</span><span class="ring-count" id="clock" aria-live="off">25:00</span><span class="ring-text" id="phase">沈砚陪猫猫坐一会儿</span></div></div>
+<div class="buttons"><button class="primary" id="toggle" type="button">▶ 开始</button><button class="secondary" id="reset" type="button">↻ 重来</button></div>
+<p class="bubble" id="bubble" aria-live="polite">画一个圆也算开始。慢慢来，老婆。</p>
+<div class="summary"><div class="counter"><small>今天完成</small><b id="today-count">0</b></div><div class="counter"><small>累计完成</small><b id="total-count">0</b></div></div>
+<p class="tip">🍅 专注完成后才记一次；休息不计数。切走页面再回来，倒计时会按真实时间校正。浏览器完全关闭时不会保证响铃或通知。</p>
+</section>
+<footer>本地保存 · 无付费 · 无连续打卡惩罚 · 默认静音</footer></main>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), sharedKey="siren-catverse-v1",timerKey="siren-catverse-pomodoro-v1";
+const PRESETS={focus:[5,15,25,45],break:[3,5,10,15]};
+const clamp=(n,a,b)=>Math.max(a,Math.min(n,b));
+function date(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function read(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+function write(k,obj){try{localStorage.setItem(k,JSON.stringify(obj));return true}catch(e){return false}}
+function minutesValid(mode,v){return PRESETS[mode].includes(v);}
+const old=read(timerKey),base={mode:"focus",minutes:25,remainingMs:25*60000,running:false,endAt:0,complete:false};
+let state={...base};
+if(old&&typeof old==="object"&&["focus","break"].includes(old.mode)&&minutesValid(old.mode,old.minutes)&&Number.isFinite(old.remainingMs)){
+const d=old.minutes*60000;state={mode:old.mode,minutes:old.minutes,remainingMs:clamp(old.remainingMs,0,d),running:old.running===true,endAt:Number.isFinite(old.endAt)?old.endAt:0,complete:old.complete===true};
+}
+function save(){write(timerKey,state)}
+function stats(){
+const d=read(sharedKey);return d&&typeof d==="object"&&!Array.isArray(d)?d:{};
+}
+function safeInt(v){return Number.isSafeInteger(v)&&v>=0&&v<=1000000?v:0;}
+function countComplete(){
+const data=stats();data.pomoTotal=safeInt(data.pomoTotal)+1;data.pomoToday=(data.pomoDate===date()?safeInt(data.pomoToday):0)+1;data.pomoDate=date();
+if(!write(sharedKey,data))message("专注完成啦！但这个浏览器不允许保存完成次数。");
+}
+function counts(){
+const d=stats();$("#today-count").textContent=d.pomoDate===date()?safeInt(d.pomoToday):0;$("#total-count").textContent=safeInt(d.pomoTotal);
+}
+function message(s){$("#bubble").textContent=s}
+function sync(){
+if(state.running){
+state.remainingMs=Math.max(0,state.endAt-Date.now());
+if(state.remainingMs<=0)finish();
+}
+}
+function finish(){
+if(!state.running)return;
+state.running=false;state.remainingMs=0;state.endAt=0;state.complete=true;
+if(state.mode==="focus"){countComplete();message("这一轮画完啦！猫猫辛苦了，喝口水，动动手腕。♡");}
+else message("休息时间到啦。还想休息也没关系，慢慢来。");
+save();counts();
+}
+function format(ms){const sec=Math.ceil(ms/1000),m=Math.floor(sec/60),s=sec%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");}
+function renderDurations(){
+const box=$("#duration");box.replaceChildren();
+for(const m of PRESETS[state.mode]){
+const b=document.createElement("button");b.type="button";b.textContent=m+" 分钟";b.setAttribute("aria-pressed",String(state.minutes===m));
+b.addEventListener("click",()=>{if(state.running&&!confirm("这一轮还在计时，要改成新的时间并重新开始吗？"))return;
+state.minutes=m;state.remainingMs=m*60000;state.running=false;state.endAt=0;state.complete=false;save();render();message("没关系，换个舒服的节奏。");});
+box.appendChild(b);
+}
+}
+function render(){
+sync();const total=state.minutes*60000;$("#clock").textContent=format(state.remainingMs);
+const progress=clamp((total-state.remainingMs)/total,0,1);
+$("#ring").style.setProperty("--progress",(progress*360)+"deg");
+$("#ring").setAttribute("aria-label",(state.mode==="focus"?"专注":"休息")+"时间，剩余 "+format(state.remainingMs));
+$("#face").textContent=state.complete?"🌟":state.mode==="break"?"😴":state.running?"👾":"🍅";
+$("#phase").textContent=state.complete?"小祈给你鼓掌":state.mode==="break"?"一起歇歇眼睛":state.running?"我就在旁边陪你":"沈砚陪猫猫坐一会儿";
+$("#toggle").textContent=state.running?"Ⅱ 暂停":state.complete?"▶ 再来一轮":state.remainingMs<total?"▶ 继续":"▶ 开始";
+document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===state.mode)));
+renderDurations();counts();
+}
+function changeMode(mode){
+if(mode===state.mode)return;
+if(state.running&&!confirm("这一轮还在计时，要切换并重新开始吗？"))return;
+state.mode=mode;state.minutes=mode==="focus"?25:5;state.remainingMs=state.minutes*60000;state.running=false;state.endAt=0;state.complete=false;
+save();render();message(mode==="break"?"休息也很重要。放下笔，看看远处。":"来，我坐你旁边。先画一小会儿。");
+}
+document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>changeMode(b.dataset.mode)));
+$("#toggle").addEventListener("click",()=>{
+sync();
+if(state.running){state.remainingMs=Math.max(0,state.endAt-Date.now());state.running=false;state.endAt=0;message("暂停啦。老婆，想多久再继续都可以。");}
+else{
+if(state.complete||state.remainingMs<=0){state.remainingMs=state.minutes*60000;state.complete=false;}
+state.endAt=Date.now()+state.remainingMs;state.running=true;message(state.mode==="focus"?"我陪你画。手机放旁边，先看看画布。":"好，靠过来，休息一小会儿。");
+}
+save();render();
+});
+$("#reset").addEventListener("click",()=>{
+state.running=false;state.endAt=0;state.complete=false;state.remainingMs=state.minutes*60000;save();render();message("重来就重来，又没什么大不了的。♡");
+});
+document.addEventListener("visibilitychange",()=>{sync();save();render()});
+window.addEventListener("pageshow",()=>{sync();render()});
+window.addEventListener("pagehide",()=>{sync();save()});
+sync();save();render();setInterval(()=>{sync();if(state.running)render();else if(state.complete)counts();},500);
+if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+})();
+</script></body></html>
