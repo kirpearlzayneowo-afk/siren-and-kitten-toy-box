@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#29344c">
+<meta name="description" content="小祈的小窝 · CATVERSE 像素外星宠物与专注罐罐">
+<link rel="icon" href="./catverse-icon.svg" type="image/svg+xml"><link rel="manifest" href="./site.webmanifest">
+<title>👾 小祈的小窝 · CATVERSE</title>
+<style>
+:root{color-scheme:dark;--ink:#fff4fb;--muted:#cad4e6;--pink:#f0bfdc;--blue:#bcd5ec;--gold:#f5d8a6}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 75% -6%,#695071,transparent 48%),radial-gradient(ellipse at 7% 100%,#324e6b,transparent 54%),#1b2336;color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
+main{max-width:700px;margin:auto;padding:16px 15px 60px}
+a{color:var(--pink)}.back{display:inline-block;margin:2px 0 13px;font-size:13px;text-decoration:none}
+.head{background:#303b53;border:1px solid #746e88;border-radius:23px;padding:18px 20px}.eyebrow{font-size:11px;letter-spacing:.13em;color:var(--pink)}
+h1{font-size:27px;margin:3px 0 5px}h2{font-size:18px;margin:0 0 10px}.sub{font-size:13px;color:var(--muted);margin:0}
+.stage{background:#303b55;border:1px solid #88819c;border-radius:24px;margin:15px 0;padding:20px 14px 16px;text-align:center;position:relative;overflow:hidden}
+.stars{font-size:18px;letter-spacing:16px;color:#f8d6a5}
+.pet{position:relative;margin:8px auto 12px;width:216px;height:216px;display:grid;place-items:center;border-radius:23px;background:radial-gradient(ellipse at 50% 70%,#77628a,#454767 58%,#3a405b);box-shadow:inset 0 0 0 2px #7b769c}
+.pet canvas{width:192px;height:192px;image-rendering:pixelated;image-rendering:crisp-edges;filter:drop-shadow(0 8px 0 #181f315a)}
+.pet.happy canvas{animation:bop .55s ease 1}.pet.happy:after{content:"✦ ✧ ✦";position:absolute;top:15px;right:3px;color:#fbd4ac;font-size:20px}
+@keyframes bop{0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(-17px) rotate(-7deg)}70%{transform:translateY(-5px) rotate(5deg)}}
+.name{font-size:22px;font-weight:780}.label{font-size:13px;color:#d6def0}.dialog{background:#4b4967;max-width:430px;border-radius:15px;padding:12px 14px;margin:13px auto 2px;font-size:13px;text-align:left;min-height:55px;border:1px solid #9282a7}
+.level{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:11px;font-size:12px;color:#ead8e9}
+.shelf{background:#303d57;border:1px solid #6d7d98;border-radius:20px;padding:18px 14px}.shelf .hint{font-size:12px;color:#cbd4e7;margin:0 0 14px}
+.cans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.can{border:1px solid #8490ac;background:linear-gradient(155deg,#65647d,#465674);border-radius:17px;padding:14px 6px 12px;color:white;font:inherit;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;cursor:pointer;min-width:0;min-height:160px}
+.can .emoji{font-size:32px}.can strong{font-size:13px}.can span.count{font-size:12px;color:#f7d8e9}.can:disabled{opacity:.5;cursor:not-allowed}.can:not(:disabled):active{transform:translateY(2px)}
+.can:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.notice{font-size:12px;color:#d6dce8;margin:12px 3px}.go{display:block;text-align:center;text-decoration:none;border-radius:14px;background:#e6bdd4;color:#302b3a;font-weight:800;padding:12px 15px;margin-top:17px}
+footer{font-size:12px;color:#bbc5d9;text-align:center;margin:20px 0}
+@media(max-width:420px){h1{font-size:24px}.pet{width:193px;height:193px}.pet canvas{width:172px;height:172px}.cans{gap:6px}.can{min-height:153px;padding:11px 3px}.can .emoji{font-size:27px}.can strong{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.pet.happy canvas{animation:none!important}.can:active{transform:none}}
+</style></head><body><main>
+<a class="back" href="./index.html">← 回猫猫宇宙</a>
+<header class="head"><div class="eyebrow">KIT TEN? NO · KITTEN ARCADE / QI'S DEN</div><h1>👾 小祈的小窝</h1><p class="sub">塞壬和猫养出的紫色像素怪物。它最爱罐罐，最不爱催你打卡。🤘</p></header>
+<section class="stage" aria-label="小祈像素宠物">
+<div class="stars" aria-hidden="true">✦ ✧ ✦</div>
+<div class="pet" id="pet"><canvas width="160" height="160" id="sprite" role="img" aria-label="一只圆滚滚的紫色像素外星小怪物，眼睛亮晶晶，举着小短手"></canvas></div>
+<div class="name">小祈 <span aria-hidden="true">👾</span></div>
+<div class="label" id="form">幼年小祈 · 刚刚入住游戏厅</div>
+<div class="level"><span id="bond">亲密度 0</span><span id="fed">喂食 0 次</span></div>
+<div class="dialog" id="dialog" role="status" aria-live="polite">「叽？猫猫回来啦！我没有偷偷吃罐罐。」</div>
+</section>
+<section class="shelf" aria-label="小祈的罐罐柜">
+<h2>🥫 小祈的罐罐柜</h2>
+<p class="hint">每完成一轮专注，就会获得一罐。点罐罐就能亲手喂它；休息和中断都不会让小祈挨饿。♡</p>
+<div class="cans">
+<button class="can" data-feed="star" type="button"><span class="emoji" aria-hidden="true">⭐</span><strong>星星鱼泥</strong><span class="count">0 罐</span></button>
+<button class="can" data-feed="hawthorn" type="button"><span class="emoji" aria-hidden="true">🍒</span><strong>山楂果冻</strong><span class="count">0 罐</span></button>
+<button class="can" data-feed="moon" type="button"><span class="emoji" aria-hidden="true">🌙</span><strong>月光小鱼干</strong><span class="count">0 罐</span></button>
+</div>
+<div class="notice" id="notice">罐罐只存在当前浏览器，记得在猫猫宇宙首页备份存档。</div>
+<a class="go" href="./pomodoro.html">🍅 去和沈砚完成一个番茄钟 →</a>
+</section>
+<footer>小祈目前是基础养成版 · 未来还有换装、花园和更多形态等着施工。</footer>
+</main>
+<script src="./pet.js"></script>
+<script>
+(function(){
+"use strict";
+const pet=window.CatversePet,$=s=>document.querySelector(s);
+const art=[
+"......DDDD......",
+"....DDMMMMDD....",
+"...DMMMMMMMMD...",
+"..DMMMMMMMMMMD..",
+"..DMMWMMMMWMMD..",
+".DMMMWWMMWWMMMD.",
+".DMMMMMMMMMMMMD.",
+".DMMMMMPPMMMMMD.",
+".DMMMMMMMMMMMMD.",
+"..DMMMMMMMMMMD..",
+"...DMMMDDMMMD...",
+"....DDD..DDD....",
+"....D......D..."
+];
+const canvas=$("#sprite"),ctx=canvas.getContext("2d"),colors={D:"#342b53",M:"#9974bd",W:"#fff5f3",P:"#d99cdb"};
+if(ctx){ctx.imageSmoothingEnabled=false;for(let y=0;y<art.length;y++)for(let x=0;x<16;x++){const c=colors[art[y][x]];if(c){ctx.fillStyle=c;ctx.fillRect(x*10,y*10+12,10,10);}}}
+function render(){
+const st=pet.load();for(const k of pet.TYPES){const b=document.querySelector('[data-feed="'+k+'"]');b.querySelector(".count").textContent=st.cans[k]+" 罐";b.disabled=st.cans[k]<=0;b.setAttribute("aria-label","喂小祈 "+pet.NAMES[k]+"，现有 "+st.cans[k]+" 罐");}
+$("#fed").textContent="已喂食 "+st.fed+" 次";$("#bond").textContent="亲密度 "+st.bond;
+const form=st.bond<3?"幼年小祈 · 刚刚入住游戏厅":st.bond<7?"活泼小祈 · 会蹦蹦跳跳":st.bond<15?"夜游小祈 · 会看星星":"馆长小祈 · 岗位：吃罐罐";
+$("#form").textContent=form;
+}
+document.querySelectorAll("[data-feed]").forEach(b=>b.addEventListener("click",()=>{
+const result=pet.feed(b.dataset.feed);
+if(!result.ok){$("#dialog").textContent="「叽？罐罐可能吃光了，或者浏览器不让存档。」";render();return;}
+const words={star:"「叽叽！鱼泥上真的有星星吗？」",hawthorn:"「叽！酸酸甜甜的山楂果冻！摇滚！」",moon:"「叽呜……月光小鱼干，好香。」"};
+$("#dialog").textContent=words[result.kind];
+$("#pet").classList.remove("happy");void $("#pet").offsetWidth;$("#pet").classList.add("happy");render();
+}));
+window.addEventListener("storage",e=>{if(e.key===pet.KEY)render()});
+render();
+if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+})();
+</script></body></html>
