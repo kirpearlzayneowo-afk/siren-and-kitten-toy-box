@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#262d43"><title>猫猫游乐厅 · SIREN CATVERSE</title>
+<style>
+:root{color-scheme:dark;--ink:#fff7fb;--muted:#cdd4e6;--pink:#eac4d9;--blue:#c3d8e8;--panel:#303c54;--border:#637089}
+*{box-sizing:border-box}html{min-height:100%;background:#1d2639}body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 80% 0,#493e60,transparent 47%),#1d2639}
+main{max-width:730px;margin:auto;padding:16px 13px 60px}.back{display:inline-block;color:#f4d7e4;text-decoration:none;font-size:13px;margin-bottom:12px}.top{background:#2d3951;border:1px solid #57677f;border-radius:21px;padding:20px;margin-bottom:12px}.eyebrow{letter-spacing:.15em;color:var(--pink);font-size:11px}.top h1{font-size:27px;line-height:1.3;margin:7px 0}.sub{color:var(--muted);font-size:13px;margin:0}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.tabs button{border-radius:15px;padding:12px;background:#34435d;border:1px solid #74819c;color:var(--ink)}.tabs button[aria-selected=true]{background:#5b536e;border-color:#f2cae0;box-shadow:inset 0 -3px 0 #ebbad5;font-weight:700}
+.game{border:1px solid #5c6c83;background:var(--panel);padding:13px;border-radius:21px}.hud{display:flex;gap:8px;margin-bottom:10px}.stat{flex:1;min-width:0;border-radius:12px;background:#404e66;padding:7px 10px}.stat small{display:block;font-size:11px;color:#d1d9e7}.stat b{font-size:20px;font-variant-numeric:tabular-nums}canvas{width:100%;height:auto;display:block;border-radius:15px;background:#29364f;touch-action:manipulation;cursor:crosshair}
+.control{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:12px}button{font:inherit;cursor:pointer}button:disabled{opacity:.54;cursor:default}.primary{border:0;background:#e7bfd5;color:#332d3b;font-weight:700;border-radius:12px;padding:11px 16px}.secondary{border:1px solid #879ab4;background:#42546e;border-radius:12px;padding:10px 14px;color:white}.primary:focus-visible,.secondary:focus-visible,.tabs button:focus-visible{outline:3px solid #f6dfae;outline-offset:2px}
+.instructions{font-size:12px;color:#d5deee;margin:12px 2px 3px;text-align:center;min-height:35px}.toast{height:23px;text-align:center;color:#f2d1e1;font-size:12px}.footer{color:#abbdd3;text-align:center;font-size:12px;margin:18px 4px}
+@media(min-width:550px){.game{padding:20px}.arena{max-width:400px;margin:0 auto}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body><main>
+<a class="back" href="./index.html">← 回到猫猫宇宙</a>
+<header class="top"><div class="eyebrow">SIREN · CATVERSE / ARCADE</div><h1>猫猫游乐厅 🎠</h1><p class="sub">弹珠叮叮当当，小鱼游来游去。每局免费玩，不用金币，也不用打卡。</p></header>
+<nav class="tabs" aria-label="选择游戏"><button type="button" data-game="pin" aria-selected="true">🔮 弹珠机</button><button type="button" data-game="fish" aria-selected="false">🐟 小鱼套圈圈</button></nav>
+<section class="game" aria-label="游乐厅">
+<div class="hud"><div class="stat"><small>本局得分</small><b id="score">0</b></div><div class="stat"><small>历史最高</small><b id="best">0</b></div><div class="stat"><small id="count-label">剩余弹珠</small><b id="remaining">5</b></div></div>
+<div class="arena"><canvas id="board" width="360" height="520" role="img" aria-label="游戏画面：可以用手指点击互动。">请使用支持 Canvas 的浏览器。</canvas>
+<div class="control"><button type="button" id="fire" class="primary">发射弹珠 ♡</button><button type="button" id="reset" class="secondary">重新开局 ↻</button></div></div>
+<p id="instructions" class="instructions">点一下顶端调整发射方向，然后按「发射弹珠」。弹珠撞到圆钉会弹开，落进格子就得分！</p>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</section>
+<p class="footer">分数保存在当前浏览器，可随 CATVERSE 存档备份。动动手指就能玩，甲方猫猫终身免费。♡</p>
+</main><script>
+(function(){
+"use strict";
+const canvas=document.getElementById("board"),ctx=canvas.getContext("2d");if(!ctx)return;
+const W=360,H=520,storeKey="siren-catverse-v1";const scoreNode=document.getElementById("score"),bestNode=document.getElementById("best"),remainingNode=document.getElementById("remaining"),labelNode=document.getElementById("count-label"),instructions=document.getElementById("instructions"),fireButton=document.getElementById("fire"),toast=document.getElementById("toast");
+const $=q=>document.querySelector(q), clamp=(v,min,max)=>Math.max(min,Math.min(max,v)),rand=(a,b)=>a+Math.random()*(b-a);
+let mode="pin",score=0,shots=0,balls=[],rings=[],fish=[],floats=[],aimX=W/2,aimY=250,frame=0,accum=0,last=0,hitCount=0;
+const MAX_PIN=5,MAX_RING=10,pinValues=[10,25,60,100,60,25,10],pegs=[];
+for(let row=0;row<7;row++){const cols=row%2?6:7;const spacing=45,offset=(W-(cols-1)*spacing)/2;for(let col=0;col<cols;col++)pegs.push({x:offset+col*spacing,y:140+row*44,r:6});}
+function loaded(){try{return JSON.parse(localStorage.getItem(storeKey)||"{}")||{};}catch(e){return {};}}
+function getBest(){const x=loaded().arcadeBest;return x&&Number.isFinite(x[mode])?Math.max(0,x[mode]):0;}
+function writeBest(value){try{const state=loaded();state.arcadeBest=state.arcadeBest||{};state.arcadeBest[mode]=Math.max(0,Math.floor(value));localStorage.setItem(storeKey,JSON.stringify(state));}catch(e){say("当前浏览器无法保存最高分，仍然可以继续玩。");}}
+function say(t){toast.textContent=t;}
+function bubbles(x,y,text,color="#ffe6f3"){floats.push({x,y,text,color,ttl:1.25});}
+function updateHud(){scoreNode.textContent=score;bestNode.textContent=getBest();remainingNode.textContent=(mode==="pin"?MAX_PIN:MAX_RING)-shots;labelNode.textContent=mode==="pin"?"剩余弹珠":"剩余圈圈";fireButton.textContent=mode==="pin"?"发射弹珠 ♡":"往瞄准点扔圈 ♡";fireButton.disabled=(mode==="pin"?shots>=MAX_PIN:shots>=MAX_RING);}
+function addScore(value,x,y){score+=value;if(score>getBest())writeBest(score);bubbles(x,y,"+"+value,value>=60?"#ffe4a4":"#ffe6f3");updateHud();}
+function makeFish(){fish=[];for(let i=0;i<5;i++)fish.push({x:rand(38,320),y:155+i*67,baseY:155+i*67,dir:i%2?-1:1,speed:rand(23,40),phase:rand(0,6.28),color:["#f6c2d4","#f8dfa4","#b9d8e9","#d7c4f0","#b8dfd3"][i],caught:0});}
+function resetGame(){score=0;shots=0;balls=[];rings=[];floats=[];hitCount=0;aimX=180;aimY=270;if(mode==="fish")makeFish();updateHud();say("");}
+function selectGame(m){mode=m;document.querySelectorAll("[data-game]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.game===m)));instructions.textContent=m==="pin"?"点击弹珠机顶部选择发射位置，再按发射。撞击圆钉、落入得分槽，好运叮当响！":"点击水里的位置扔圈，圈落下时套中游动的小鱼就得分。也可以用方向键瞄准、空格键发射。";resetGame();}
+function fire(){if(mode==="pin"){if(shots>=MAX_PIN)return;balls.push({x:clamp(aimX,14,346),y:50,vx:rand(-16,16),vy:0,r:8,hitTime:0});shots++;}else{if(shots>=MAX_RING)return;rings.push({x:180,y:510,tx:clamp(aimX,15,345),ty:clamp(aimY,115,465),t:0,finished:false});shots++;}updateHud();}
+function line(x1,y1,x2,y2,color,width=1){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
+function circle(x,y,r,fill,stroke){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}}
+function roundRect(x,y,w,h,r,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
+function text(t,x,y,size,color,align="center"){ctx.textAlign=align;ctx.textBaseline="middle";ctx.fillStyle=color;ctx.font="600 "+size+"px -apple-system, BlinkMacSystemFont, sans-serif";ctx.fillText(t,x,y);}
+function drawBackdrop(){
+const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,mode==="pin"?"#453955":"#325b76");g.addColorStop(1,mode==="pin"?"#292f4c":"#28475b");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+for(let i=0;i<25;i++){let x=(i*83+37)%W,y=(i*131+frame*.12*(i%2?1:-1))%H;circle(x,(y+H)%H,mode==="pin"?1.7:2.5,mode==="pin"?"#a89aaf77":"#bce4ee55");}
+roundRect(9,10,342,66,15,mode==="pin"?"#604d69":"#3a697f");text(mode==="pin"?"✦ 星星弹珠机 ✦":"♡ 月光小鱼塘 ♡",180,30,18,"#fff0f8");text(mode==="pin"?"五颗弹珠，看看会落到哪里":"十个圈圈，套住游动的小鱼",180,57,12,"#d9e5f6");
+}
+function drawPin(){
+drawBackdrop();roundRect(16,94,328,413,17,"#38405e");roundRect(20,98,320,403,13,"#4d4868");
+ctx.globalAlpha=.75;for(let i=0;i<5;i++)circle(50+i*66,107+(i%2)*6,4,"#b7a8cb");ctx.globalAlpha=1;
+for(const p of pegs){circle(p.x,p.y,p.r+2,"#554d70");circle(p.x,p.y,p.r,"#edc3d9","#fff4fb");circle(p.x-2,p.y-2,1.6,"#ffffff");}
+const slotY=464;for(let i=0;i<7;i++){const x=20+i*(320/7);line(x,slotY,x,501,"#dbbad9",3);}line(20,501,340,501,"#d9c1e5",2);
+for(let i=0;i<7;i++)text(String(pinValues[i]),20+(i+.5)*(320/7),485,13,i===3?"#ffe5a8":"#fff2fa");
+line(aimX,79,aimX,115,"#f7d09c",2);text("▼",aimX,111,15,"#ffedb8");
+for(const b of balls){circle(b.x,b.y,b.r,"#ffeac7","#ffffff");circle(b.x-2,b.y-3,2.5,"#fff");}
+}
+function updatePin(dt){
+const remove=[];
+for(const ball of balls){
+ball.vy+=640*dt;ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;
+if(ball.x<29+ball.r){ball.x=29+ball.r;ball.vx=Math.abs(ball.vx)*.72;}if(ball.x>331-ball.r){ball.x=331-ball.r;ball.vx=-Math.abs(ball.vx)*.72;}
+for(const p of pegs){
+const dx=ball.x-p.x,dy=ball.y-p.y,dist=Math.hypot(dx,dy),size=ball.r+p.r;
+if(dist<size&&dist>0.01){const nx=dx/dist,ny=dy/dist,overlap=size-dist;ball.x+=nx*(overlap+.2);ball.y+=ny*(overlap+.2);const relative=ball.vx*nx+ball.vy*ny;if(relative<0){ball.vx-=1.65*relative*nx;ball.vy-=1.65*relative*ny;ball.vx+=nx*8;}}
+}
+if(ball.y>460){for(let i=1;i<7;i++){const edge=20+i*(320/7);if(Math.abs(ball.x-edge)<ball.r+1){ball.x=edge+(ball.x<edge?-1:1)*(ball.r+1);ball.vx*=-.55;}}}
+ball.vx=clamp(ball.vx,-245,245);
+if(ball.y>=498){const idx=clamp(Math.floor((ball.x-20)/(320/7)),0,6);addScore(pinValues[idx],ball.x,473);remove.push(ball);}
+}
+balls=balls.filter(b=>!remove.includes(b));
+if(shots===MAX_PIN&&balls.length===0&&remove.length)say("本局结束！得了 "+score+" 分。按「重新开局」再玩一轮。");
+}
+function fishShape(f){
+const {x,y,color,dir}=f;ctx.save();ctx.translate(x,y);ctx.scale(dir,1);
+ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(-19,0);ctx.lineTo(-39,-14);ctx.lineTo(-37,13);ctx.closePath();ctx.fill();
+ctx.beginPath();ctx.ellipse(0,0,23,16,0,0,Math.PI*2);ctx.fill();
+ctx.fillStyle="#ffffffcc";ctx.beginPath();ctx.ellipse(-4,5,10,5,-.2,0,Math.PI*2);ctx.fill();
+circle(11,-4,3,"#273f54");circle(12,-5,1,"#fff");circle(0,-15,5,color);ctx.restore();
+}
+function drawFish(){
+drawBackdrop();roundRect(15,92,330,409,19,"#356b7f");for(let i=0;i<8;i++){const yy=115+i*48;line(20,yy,340,yy,"#aadce71e",1);}
+for(let i=0;i<12;i++){const x=25+(i*79)%310,y=125+(i*101+frame*.25)%345;circle(x,y,2+(i%3),"#b9e7e455");}
+for(const f of fish)fishShape(f);
+for(const r of rings){const progress=clamp(r.t/.7,0,1),x=180+(r.tx-180)*progress,y=510+(r.ty-510)*progress-105*Math.sin(Math.PI*progress),radius=22-7*progress;circle(x,y,radius,null,"#ffe3ad");circle(x,y,radius+3,null,"#f9c4d7");}
+circle(aimX,aimY,16,null,"#ffe6b5");line(aimX-25,aimY,aimX-19,aimY,"#ffe6b5",2);line(aimX+19,aimY,aimX+25,aimY,"#ffe6b5",2);line(aimX,aimY-25,aimX,aimY-19,"#ffe6b5",2);line(aimX,aimY+19,aimX,aimY+25,"#ffe6b5",2);
+text("✦",25,475,16,"#f2bcd0");text("✦",336,125,14,"#f2bcd0");
+}
+function updateFish(dt){
+for(const f of fish){f.x+=f.dir*f.speed*dt;f.phase+=dt*2;f.y=f.baseY+Math.sin(f.phase)*6;if(f.x<43){f.x=43;f.dir=1;}if(f.x>318){f.x=318;f.dir=-1;}if(f.caught>0)f.caught-=dt;}
+const remove=[];
+for(const r of rings){r.t+=dt;if(r.t>=.7){remove.push(r);let best=null,dist=Infinity;for(const f of fish){const d=Math.hypot(f.x-r.tx,f.y-r.ty);if(d<dist&&f.caught<=0){best=f;dist=d;}}if(best&&dist<=27){best.caught=.85;hitCount++;addScore(30+(hitCount%3===0?20:0),r.tx,r.ty);say("套中了！小鱼打了个泡泡 🫧");}else {hitCount=0;say("噗通！这次没套中，再来一圈～");}}}
+rings=rings.filter(r=>!remove.includes(r));
+if(shots===MAX_RING&&rings.length===0&&remove.length)say("十个圈圈用完啦！这局得了 "+score+" 分 ♡");
+}
+function drawFloats(dt){floats=floats.filter(f=>f.ttl>0);for(const f of floats){f.ttl-=dt;f.y-=22*dt;ctx.globalAlpha=clamp(f.ttl,0,1);text(f.text,f.x,f.y,17,f.color);}ctx.globalAlpha=1;}
+function loop(now){if(!last)last=now;let dt=clamp((now-last)/1000,0,.05);last=now;accum+=dt;while(accum>=1/60){if(mode==="pin")updatePin(1/60);else updateFish(1/60);accum-=1/60;}frame++;if(mode==="pin")drawPin();else drawFish();drawFloats(dt);requestAnimationFrame(loop);}
+function coords(e){const rect=canvas.getBoundingClientRect();return {x:clamp((e.clientX-rect.left)*W/rect.width,0,W),y:clamp((e.clientY-rect.top)*H/rect.height,0,H)};}
+canvas.addEventListener("pointerdown",e=>{const c=coords(e);if(mode==="pin"){if(c.y<135){aimX=clamp(c.x,32,328);say("发射位置调整好啦，按「发射弹珠」！");}else{aimX=clamp(c.x,32,328);fire();}}else{aimX=clamp(c.x,22,338);aimY=clamp(c.y,120,460);fire();}});
+window.addEventListener("keydown",e=>{if(["INPUT","BUTTON"].includes(document.activeElement.tagName))return;if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," ","Enter"].includes(e.key))return;e.preventDefault();if(e.key==="ArrowLeft")aimX=clamp(aimX-16,22,338);else if(e.key==="ArrowRight")aimX=clamp(aimX+16,22,338);else if(e.key==="ArrowUp")aimY=clamp(aimY-16,120,460);else if(e.key==="ArrowDown")aimY=clamp(aimY+16,120,460);else fire();});
+document.querySelectorAll("[data-game]").forEach(b=>b.addEventListener("click",()=>selectGame(b.dataset.game)));
+fireButton.addEventListener("click",fire);document.getElementById("reset").addEventListener("click",resetGame);
+selectGame("pin");requestAnimationFrame(loop);
+})();
+</script></body></html>
