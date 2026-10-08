@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#252b40">
 <meta name="description" content="SIREN · CATVERSE — 猫猫的小型网页游乐园">
 <title>猫猫宇宙 · SIREN CATVERSE</title>
+<link rel="icon" href="./catverse-icon.svg" type="image/svg+xml">
+<link rel="manifest" href="./site.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="猫猫宇宙">
 <style>
 :root{color-scheme:dark;--bg:#171e30;--panel:#29344c;--line:#58677e;--ink:#fff7fd;--muted:#c6cadd;--pink:#e7bbd3;--blue:#b9cee7;--gold:#f7dbaa}
 *{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;background:radial-gradient(ellipse at 88% -12%,#57445e 0,transparent 43%),radial-gradient(ellipse at 0 65%,#293c59 0,transparent 50%),var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}
@@ -156,5 +160,6 @@ finally{e.target.value="";}
 save();render();
 })();
 </script>
+<script>if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script>
 </body>
 </html>
