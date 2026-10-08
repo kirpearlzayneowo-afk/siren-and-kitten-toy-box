@@ -1,6 +1,6 @@
 /* CATVERSE: cache only our own static files within the service-worker scope. */
-const CACHE="catverse-offline-v04";
-const FILES=["./index.html","./arcade.html","./catverse-icon.svg","./site.webmanifest"];
+const CACHE="catverse-offline-pomodoro-preview";
+const FILES=["./index.html","./arcade.html","./pomodoro.html","./catverse-icon.svg","./site.webmanifest"];
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting()));
 });
