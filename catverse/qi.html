@@ -27,12 +27,35 @@ h1{font-size:27px;margin:3px 0 5px}h2{font-size:18px;margin:0 0 10px}.sub{font-s
 footer{font-size:12px;color:#bbc5d9;text-align:center;margin:20px 0}
 @media(max-width:420px){h1{font-size:24px}.pet{width:193px;height:193px}.pet canvas{width:172px;height:172px}.cans{gap:6px}.can{min-height:153px;padding:11px 3px}.can .emoji{font-size:27px}.can strong{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.pet.happy canvas{animation:none!important}.can:active{transform:none}}
+
+/* 小祈的七种古怪零食手推车 */
+.cart{position:relative;background:linear-gradient(180deg,#3f3b60,#303c56 50%);border:1px solid #a78dad;border-radius:23px;margin:17px 0;padding:16px 14px 21px;overflow:hidden}
+.cart:before{content:"";position:absolute;left:13px;right:13px;top:5px;height:10px;background:repeating-linear-gradient(90deg,#e7bbd4 0px,#e7bbd4 34px,#c5d6ea 34px,#c5d6ea 67px,#f7dbad 67px,#f7dbad 100px);border-radius:2px 2px 7px 7px;opacity:.75}
+.cart-heading{display:flex;gap:12px;align-items:center;margin:11px 0 12px}.cart-heading .wheels{font-size:32px}.cart-title h2{margin:0 0 2px}.cart-title p{font-size:12px;color:#f1dae9;margin:0}
+.cart-wallet{background:#494d6d;border-radius:12px;padding:10px 12px;border:1px solid #8b84a5;font-size:12px;line-height:1.5;margin-bottom:11px}
+.cart-wallet strong{font-size:17px;color:#f8dda9}
+.snack-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.snack{background:#4b4d70;border-radius:17px;border:1px solid #8e8ba8;padding:12px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.snack .art{font-size:30px;line-height:1.4}.snack h3{font-size:14px;margin:0}.snack p{font-size:12px;color:#ece0ea;line-height:1.5;margin:0;flex:1}
+.snack .served{font-size:11px;color:#d6d4ed}.snack button,.wash,.wish-btn{margin-top:5px;min-height:40px;border-radius:10px;padding:8px 10px;border:1px solid #f0cde4;background:#efc7df;color:#322e43;font:inherit;font-size:12px;font-weight:740;cursor:pointer}
+.snack button:disabled,.wash:disabled,.wish-btn:disabled{opacity:.55;cursor:not-allowed}
+.cart-bubble{border-radius:13px;background:#5a4e70;padding:12px 14px;font-size:13px;margin-top:12px;min-height:54px;border:1px solid #9a85aa}
+.clean-area{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:11px;padding:8px 10px;border-radius:12px;background:#343e5d;font-size:12px}
+.clean-area .wash{margin:0}.cart-hint{font-size:12px;color:#d2d9ea;margin-top:12px}
+.wishbox{border:1px solid #907e9e;border-radius:12px;padding:10px;margin-top:11px;font-size:12px;background:#404666}
+.wishbox .wish-input{width:100%;padding:10px;border:1px solid #ab9ab6;border-radius:9px;background:#2f3952;color:white;margin:8px 0;font:inherit}
+.wishbox .wish-btn{width:100%;margin:0}.hidden{display:none!important}
+.tongue{font-size:12px;font-weight:700;color:#f8d9ec;margin:2px 0 0}
+.tongue.rainbow{background:linear-gradient(90deg,#fdc5c5,#ffe8b0,#caf0d2,#b8e5ff,#efcaf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cart button:focus-visible{outline:3px solid #f9e1a9;outline-offset:3px}
+@media(max-width:390px){.snack-grid{grid-template-columns:1fr}.snack{min-height:unset}.snack .art{font-size:25px}}
 </style></head><body><main>
 <a class="back" href="./index.html">← 回猫猫宇宙</a>
 <header class="head"><div class="eyebrow">KITTEN ARCADE · QI'S DEN</div><h1>👾 小祈的小窝</h1><p class="sub">塞壬和猫养出的紫色像素怪物。它最爱罐罐，最不爱催你打卡。🤘</p></header>
 <section class="stage" aria-label="小祈像素宠物">
 <div class="stars" aria-hidden="true">✦ ✧ ✦</div>
 <div class="pet" id="pet"><canvas width="160" height="160" id="sprite" role="img" aria-label="一只圆滚滚的紫色像素外星小怪物，眼睛亮晶晶，举着小短手"></canvas></div>
+<div class="tongue" id="tongue" aria-live="polite"></div>
 <div class="name">小祈 <span aria-hidden="true">👾</span></div>
 <div class="label" id="form">幼年小祈 · 刚刚入住游戏厅</div>
 <div class="level"><span id="bond">亲密度 0</span><span id="fed">喂食 0 次</span></div>
@@ -48,6 +71,24 @@ footer{font-size:12px;color:#bbc5d9;text-align:center;margin:20px 0}
 </div>
 <div class="notice" id="notice">罐罐只存在当前浏览器，记得在猫猫宇宙首页备份存档。</div>
 <a class="go" href="./pomodoro.html">🍅 去和沈砚完成一个番茄钟 →</a>
+</section>
+
+<section class="cart" id="snack-cart" aria-label="小祈的罐罐手推车">
+<div class="cart-heading"><span class="wheels" aria-hidden="true">🛒</span><div class="cart-title"><h2>小祈的罐罐手推车</h2><p>叽！今日营业，摇滚外星怪物亲自摆摊 🤘</p></div></div>
+<div class="cart-wallet">🥫 可以拿 <strong id="cart-balance">0</strong> 罐专注奖励换零食。每份 1 罐，自己选，不抽奖、不花真钱。也可以继续把罐罐留给小祈直接吃。</div>
+<div class="snack-grid">
+<article class="snack"><div class="art">🍭</div><h3>棒棒糖</h3><p>经典款七彩棒棒糖，甜甜的，代价是七彩舌头</p><span class="served" id="owned-lollipop">吃过 0 次</span><button type="button" data-snack="lollipop">来根棒棒糖 · 1 罐</button></article>
+<article class="snack"><div class="art">🍦</div><h3>老冰棍</h3><p>不想体验东北舔铁杆就吹一吹再吃</p><span class="served" id="owned-icepop">吃过 0 次</span><button type="button" data-snack="icepop" id="icepop-btn">吹吹老冰棍 · 1 罐</button></article>
+<article class="snack"><div class="art">🍡</div><h3>冰糖葫芦</h3><p>世界上最美味的食物，上帝来了都得吃一串打包一串</p><span class="served" id="owned-tanghulu">吃过 0 次</span><button type="button" data-snack="tanghulu">来串糖葫芦 · 1 罐</button></article>
+<article class="snack"><div class="art">🥫</div><h3>豆豉鲮鱼罐头</h3><p>有点咸，沈砚，issues是买点油麦菜回家</p><span class="served" id="owned-fishcan">吃过 0 次</span><button type="button" data-snack="fishcan">开一罐鲮鱼 · 1 罐</button></article>
+<article class="snack"><div class="art">🖌️</div><h3>像素笔刷</h3><p>似乎不是这个世界的产物，但是口感酥脆</p><span class="served" id="owned-brush">咔嚓过 0 次</span><button type="button" data-snack="brush">试试笔刷 · 1 罐</button></article>
+<article class="snack"><div class="art">🧜‍♀️</div><h3>塞壬的鳞片</h3><p>似乎集齐999片能实现愿望...等等，这是谁的鳞片？</p><span class="served" id="owned-scale">已收藏 0 / 999</span><button type="button" data-snack="scale">收藏一片鳞片 · 1 罐</button></article>
+<article class="snack"><div class="art">🌶️</div><h3>辣条</h3><p>下一个番茄之前去洗干净你的像素小手</p><span class="served" id="owned-latiao">吃过 0 次</span><button type="button" data-snack="latiao">来根辣条 · 1 罐</button></article>
+</div>
+<div class="cart-bubble" id="cart-bubble" aria-live="polite">👾「咳咳……小祈罐罐手推车，今天什么都有卖！」</div>
+<div class="clean-area"><span id="hands" aria-live="polite">👐 像素小手干干净净</span><button class="wash" id="wash-paws" type="button">🫧 洗像素小手（免费）</button></div>
+<div class="wishbox"><span id="scale-progress">🧜‍♀️ 塞壬鳞片 0 / 999 · 集齐就能开启游戏内的许愿彩蛋</span><div id="wish-form" class="hidden"><label for="wish-text">告诉小祈一个愿望（只存在本机，不是真实世界的魔法哦）</label><input id="wish-text" class="wish-input" maxlength="120" placeholder="我希望……"><button id="wish-submit" class="wish-btn" type="button">✨ 悄悄许愿</button><span id="wish-result"></span></div></div>
+<div class="cart-hint">小祈自己开的小摊，七种都是虚拟食品与游戏收藏品。吃像素笔刷只在游戏里成立，请勿把真实画材当食物。</div>
 </section>
 <footer>小祈目前是基础养成版 · 未来还有换装、花园和更多形态等着施工。</footer>
 </main>
@@ -78,6 +119,15 @@ const st=pet.load();for(const k of pet.TYPES){const b=document.querySelector('[d
 $("#fed").textContent="已喂食 "+st.fed+" 次";$("#bond").textContent="亲密度 "+st.bond;
 const form=st.bond<3?"幼年小祈 · 刚刚入住游戏厅":st.bond<7?"活泼小祈 · 会蹦蹦跳跳":st.bond<15?"夜游小祈 · 会看星星":"馆长小祈 · 岗位：吃罐罐";
 $("#form").textContent=form;
+$("#cart-balance").textContent=pet.total(st);
+for(const kind of pet.SNACKS){const badge=$("#owned-"+kind);if(badge)badge.textContent=kind==="scale"?"已收藏 "+st.scales+" / 999":(kind==="brush"?"咔嚓过 ":"吃过 ")+st.snackCounts[kind]+" 次";}
+$("#tongue").textContent=st.tongue==="rainbow"?"🌈 七彩舌头已解锁：紫色摇滚怪物，现在是彩虹摇滚怪物！":"";
+$("#tongue").classList.toggle("rainbow",st.tongue==="rainbow");
+$("#hands").textContent=st.pawsDirty?"🌶️ 像素小手辣条油乎乎！":"👐 像素小手干干净净";
+$("#scale-progress").textContent="🧜‍♀️ 塞壬鳞片 "+st.scales+" / 999 · "+(st.scales>=999?"集齐啦！有一张只在游戏里生效的许愿纸条":"集齐就能开启游戏内的许愿彩蛋");
+$("#wish-form").classList.toggle("hidden",st.scales<999);
+if(st.wish)$("#wish-result").textContent=" 👾「你的愿望我好好收进小盒子里啦："+st.wish+"」";
+document.querySelectorAll("[data-snack]").forEach(b=>b.disabled=pet.total(st)<1||(b.dataset.snack==="scale"&&st.scales>=999));
 }
 document.querySelectorAll("[data-feed]").forEach(b=>b.addEventListener("click",()=>{
 const result=pet.feed(b.dataset.feed);
@@ -86,6 +136,33 @@ const words={star:"「叽叽！鱼泥上真的有星星吗？」",hawthorn:"「�
 $("#dialog").textContent=words[result.kind];
 $("#pet").classList.remove("happy");void $("#pet").offsetWidth;$("#pet").classList.add("happy");render();
 }));
+
+let iceBlown=false;
+const lines={
+lollipop:"👾「叽叽叽！舌头变成七彩了！我要去参加地下摇滚乐队！」🌈",
+icepop:"👾「哈——呼——！吹凉啦。东北铁杆小课堂今日停课！」",
+tanghulu:"👾「世界上最美味！给上帝再打包一串！」🍡",
+fishcan:"👾「咸！给沈砚发 Issue，让他买油麦菜回来！#18」🥬",
+brush:"👾「咔嚓！像素笔刷的口感居然是酥脆的……世界出现了材质错误！」🖌️",
+scale:"👾「鳞片 +1。嘘……这个鳞片究竟从谁身上掉的？」",
+latiao:"👾「嘶哈！好辣！下一个番茄之前先洗像素小手！」🌶️"
+};
+document.querySelectorAll("[data-snack]").forEach(b=>b.addEventListener("click",()=>{
+const kind=b.dataset.snack;
+if(kind==="icepop"&&!iceBlown){iceBlown=true;b.textContent="已经吹吹啦，吃老冰棍 · 1 罐";$("#cart-bubble").textContent="👾「呼——呼——呼——！这回不会粘在铁杆上啦。」";return;}
+const r=pet.snack(kind);
+if(!r.ok){$("#cart-bubble").textContent=r.error==="no-cans"?"👾「罐罐柜空啦！完成一个番茄钟再来，别着急。」":r.error==="scale-complete"?"👾「999 片到齐啦！可以许愿咯。」":"👾「好像没保存成功……检查一下浏览器存储。」";render();return;}
+$("#cart-bubble").textContent=lines[kind];$("#dialog").textContent=lines[kind];
+if(kind==="icepop"){iceBlown=false;b.textContent="吹吹老冰棍 · 1 罐";}
+$("#pet").classList.remove("happy");void $("#pet").offsetWidth;$("#pet").classList.add("happy");render();
+}));
+$("#wash-paws").addEventListener("click",()=>{const r=pet.wash();$("#cart-bubble").textContent=r.ok?(r.washed?"👾「哗啦哗啦——洗干净了！这才是摇滚的卫生标准。」🫧":"👾「本来就干干净净！再洗也可以。」"):"👾「洗手记录没有保存成功。」";render();});
+$("#wish-submit").addEventListener("click",()=>{
+const text=$("#wish-text").value.trim(),r=pet.makeWish(text);
+$("#cart-bubble").textContent=r.ok?"👾「叽……愿望收到。小祈会把它当成世界上重要的小秘密。」✨":"👾「先集齐 999 片鳞片，再告诉我一个短短的愿望嘛。」";
+render();
+});
+
 window.addEventListener("storage",e=>{if(e.key===pet.KEY)render()});
 render();
 if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
