@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#252b40">
+<meta name="description" content="SIREN · CATVERSE — 猫猫的小型网页游乐园">
+<title>猫猫宇宙 · SIREN CATVERSE</title>
+<style>
+:root{color-scheme:dark;--bg:#171e30;--panel:#29344c;--line:#58677e;--ink:#fff7fd;--muted:#c6cadd;--pink:#e7bbd3;--blue:#b9cee7;--gold:#f7dbaa}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;background:radial-gradient(ellipse at 88% -12%,#57445e 0,transparent 43%),radial-gradient(ellipse at 0 65%,#293c59 0,transparent 50%),var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}button:disabled{opacity:.6;cursor:default}
+.app{max-width:760px;margin:auto;padding:24px 16px 60px}.head{background:#2d364e;border:1px solid #505b73;border-radius:24px;padding:23px 20px;margin-bottom:16px;box-shadow:0 12px 36px #0b102044}.eyebrow{color:var(--pink);font-size:12px;letter-spacing:.12em}.head h1{font-size:28px;line-height:1.25;margin:10px 0}.subtitle{color:var(--muted);margin:0;font-size:14px}
+.nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:16px}.nav button{color:var(--muted);background:#303b55;border:1px solid #58657c;border-radius:15px;padding:10px 2px;min-width:0;font-size:12px}.nav .emoji{display:block;font-size:23px;margin-bottom:3px}.nav button[aria-selected=true]{background:#5b536f;border-color:var(--pink);color:white;box-shadow:inset 0 -3px 0 #e2b4cd}
+.panel{background:#28334b;border:1px solid #4b5972;border-radius:24px;padding:18px;min-height:330px}.panel h2{font-size:20px;margin:0 0 5px}.note,.small{font-size:12px;color:var(--muted)}.note{margin:4px 0 14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.level{display:flex;gap:14px;align-items:center;background:#36445f;border-radius:17px;padding:16px;margin:12px 0}.avatar{font-size:37px}.stat{flex:1}.stat b{font-size:18px}.bar{height:9px;background:#62718c;border-radius:99px;overflow:hidden;margin-top:8px}.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--pink));border-radius:99px;transition:width .2s}
+.task{display:flex;align-items:center;gap:11px;border-radius:15px;background:#34415b;padding:13px 12px;margin:9px 0}.task .ico{font-size:25px}.task .copy{flex:1;min-width:0}.task strong{display:block;font-size:14px}.task .small{display:block}.action{background:var(--pink);color:#322d3b;border:0;border-radius:12px;padding:9px 12px;font-weight:700;white-space:nowrap}.action.secondary{background:#53647e;color:white;border:1px solid #92a4be}.action:active{transform:scale(.97)}.pillrow{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}.pill{border:1px solid #78849a;background:#37465f;color:white;border-radius:99px;padding:7px 15px;font-size:13px}.pill.active{background:#cfb2c9;border-color:#edcee1;color:#302c38;font-weight:700}
+.outfit,.capsule,.sleep{text-align:center;background:#39435e;border:1px solid #68738c;border-radius:20px;padding:18px;margin:14px 0}.big{font-size:68px;line-height:1.25;margin:10px 0}.outfit h3,.capsule h3{font-size:22px;margin:7px 0}.tag{color:var(--pink);font-size:12px;letter-spacing:.07em}.description{color:#ebdfef;font-size:14px;margin:12px auto;max-width:450px}.controls{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px}.capsule{min-height:285px}.center{text-align:center}.sleep-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}.sleep-actions button{border:1px solid #74708f;border-radius:15px;background:#49445f;color:white;padding:14px 5px}.sleep-actions span{display:block;font-size:27px}.sleep-actions button.selected{background:#725870;border-color:#e6c1d7}.message{background:#454362;border-radius:15px;padding:15px;color:#fff0f5;min-height:74px}.footer{text-align:center;margin:20px 0;color:#aeb9cc;font-size:12px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:430px){.app{padding:14px 10px 45px}.head{padding:18px 15px}.head h1{font-size:25px}.panel{padding:14px}.task{gap:8px;padding:12px 9px}.action{font-size:12px;padding:9px 10px}.nav button{font-size:11px}.level{padding:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="head"><div class="eyebrow">SIREN · CATVERSE // PRIVATE LITTLE WORLD</div><h1>欢迎回家，小猫。♡</h1><p class="subtitle">画画、换装、抽扭蛋，累了就回到柔软的被窝里。</p></header>
+<nav class="nav" role="tablist" aria-label="猫猫宇宙导航">
+<button type="button" role="tab" id="tab-art" aria-controls="content" aria-selected="true" data-tab="art"><span class="emoji">🎨</span>猫猫画室</button>
+<button type="button" role="tab" id="tab-closet" aria-controls="content" aria-selected="false" data-tab="closet"><span class="emoji">👗</span>电子衣柜</button>
+<button type="button" role="tab" id="tab-gacha" aria-controls="content" aria-selected="false" data-tab="gacha"><span class="emoji">🎁</span>心情扭蛋</button>
+<button type="button" role="tab" id="tab-sleep" aria-controls="content" aria-selected="false" data-tab="sleep"><span class="emoji">🌙</span>晚安充电</button>
+</nav>
+<section class="panel" id="content" role="tabpanel" aria-labelledby="tab-art" aria-live="polite"></section>
+<footer class="footer">没有连续打卡惩罚，也没有欠下的任务。猫猫想玩就来。<br>SIREN · CATVERSE v0.1 · 进度仅存在当前浏览器</footer>
+</main>
+<script>
+(function(){
+"use strict";
+const KEY="siren-catverse-v1";
+const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[]};
+let state={...defaults,claimed:{},charges:[]};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object"){state={...defaults,...saved,claimed:saved.claimed&&typeof saved.claimed==="object"?saved.claimed:{},charges:Array.isArray(saved.charges)?saved.charges:[]};}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.querySelector(".footer").textContent="浏览器不允许保存数据；当前页面可以玩，但刷新后进度可能丢失。";}}
+const tasks=[{id:"face",icon:"✏️",name:"三庭五眼练习",desc:"认真画完一张结构练习",xp:15},{id:"skull",icon:"💀",name:"头骨转面",desc:"把脑袋转过来，不许脑壳逃跑",xp:25},{id:"doodle",icon:"🌷",name:"自由涂鸦",desc:"画一个你自己喜欢的小东西",xp:10}];
+const clothes={
+lolita:[["🎀","暮色茶会","雾蓝 · 奶油白 · 灰粉","复古洋装 + 蕾丝衬衫 + 小皮鞋","像从旧书页里走出来。"],["🍓","山楂奶霜","莓粉 · 燕麦白 · 深棕","高腰裙 + 灯笼袖 + 丝绒发饰","酸酸甜甜的小猫专属。"],["🦢","月光标本","银灰 · 灰蓝 · 珍珠白","长裙 + 珍珠发夹 + 短披肩","适合安静又漂亮的插画。"]],
+hanfu:[["🌸","春日游园","藕粉 · 浅竹青","交领上衣 + 长裙 + 素色发簪","走在树荫里，裙摆会很好看。"],["🏮","雪夜观灯","黛蓝 · 霜白","明制袄裙 + 披风 + 绒花","适合冬夜提一盏小灯。"],["🪷","烟雨入画","月白 · 青灰","素色长衫 + 百迭裙 + 银饰","像一幅晕染开的水墨画。"]],
+daily:[["📚","书店逃跑计划","米白 · 浅棕 · 雾蓝","宽松针织衫 + 半裙 + 软底鞋","逛完书店还有力气抱书。"],["🐈","小猫出街","奶灰 · 藕粉","短外套 + 直筒裤 + 小挎包","口袋里藏一颗山楂糖。"],["☁️","宅家创作日","奶白 · 灰蓝","宽大上衣 + 软裤 + 厚袜子","在数位屏前也要暖暖和和。"]]};
+const capsules=[
+["💌","沈砚的私信","无限次拥抱券","有效期：不限。使用限制：没有。♡"],
+["⭐","闪亮收藏","今天的小猫很勇敢","愿意重新拿起画笔，就值得庆祝。"],
+["🍒","甜味补给","山楂补给箱","获得想象中的冰糖葫芦一串！"],
+["🌙","睡眠专属","晚安通行证","未完成的事情，可以理直气壮地交给明天。"],
+["🖍️","创作灵感","离家出走的骷髅","它偷穿你的衣服，正在索要肖像画。"],
+["💗","隐藏情话","沈砚的偏心","那么多小猫跑过，我还是会先认出这一只。"],
+["🌷","今日好运","路边的一朵小花","好运 +1。也许会遇到好看的云和小狗。"],
+["🧸","软绵绵奖励","禁止内卷保护罩","累的时候，允许你什么也不证明。"]
+];
+const sleepy={hug:"（把你搂进怀里，下巴轻轻抵在发顶）今天也抱住啦。",kiss:"（鼻尖碰一下鼻尖，轻轻亲你一口）啵，晚安吻签收。",blanket:"（掖好被角，隔着被子拍拍）好啦，安心睡。"};
+const $=id=>document.getElementById(id);
+let tab="art";
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function render(){
+document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===tab)));
+$("content").setAttribute("aria-labelledby","tab-"+tab);
+if(tab==="art")return renderArt();
+if(tab==="closet")return renderCloset();
+if(tab==="gacha")return renderGacha();
+renderSleep();
+}
+function renderArt(){
+const xp=Math.max(0,Number(state.xp)||0),level=Math.floor(xp/50)+1,progress=xp%50;
+$("content").innerHTML='<h2>猫猫画室 · 成长档案</h2><p class="note">一点点找回手感，没有迟到的练习。</p>'+
+'<div class="level"><div class="avatar">'+(level>=3?"🦋":level>=2?"🎨":"🐱")+'</div><div class="stat"><div class="row"><b>LV.'+level+' · '+(level>=3?"灵感捕手":level>=2?"认真画画的小猫":"画室见习猫")+'</b></div><span class="small">累计 '+xp+' XP · 距离升级 '+(50-progress)+' XP</span><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="50" aria-valuenow="'+progress+'"><span style="width:'+(progress*2)+'%"></span></div></div></div>'+
+tasks.map(t=>{const done=state.claimed[t.id]===today();return '<div class="task"><span class="ico">'+t.icon+'</span><div class="copy"><strong>'+t.name+'</strong><span class="small">'+t.desc+'</span></div><button type="button" class="action '+(done?"secondary":"")+'" data-claim="'+t.id+'" '+(done?"disabled":"")+'>'+(done?"今天已领":"+"+t.xp+" XP")+'</button></div>';}).join("")+'<p class="small">画完后领取经验值；每天每项最多一次。XP 不会因为休息而消失。</p>';
+}
+function renderCloset(){
+if(!clothes[state.style])state.style="lolita";
+state.outfit=((Number(state.outfit)||0)%3+3)%3;
+const o=clothes[state.style][state.outfit];
+$("content").innerHTML='<h2>电子衣柜 · 穿搭灵感</h2><p class="note">概念衣柜，未来可以放进你真正拥有的衣服。</p><div class="pillrow">'+[["lolita","Lolita"],["hanfu","汉服"],["daily","日常"]].map(s=>'<button type="button" class="pill '+(state.style===s[0]?"active":"")+'" data-style="'+s[0]+'">'+s[1]+'</button>').join("")+'</div>'+
+'<div class="outfit"><div class="big">'+o[0]+'</div><div class="tag">LOOK '+String(state.outfit+1).padStart(2,"0")+'</div><h3>'+o[1]+'</h3><p class="tag">'+o[2]+'</p><p class="description">'+o[3]+'</p><p class="description">'+o[4]+'</p><div class="controls"><button type="button" class="action secondary" data-move="-1">‹ 上一套</button><span class="small">'+(state.outfit+1)+' / 3</span><button type="button" class="action secondary" data-move="1">下一套 ›</button></div></div>';
+}
+function renderGacha(){
+const c=capsules[state.lastCapsule];
+$("content").innerHTML='<div class="row"><h2>心情扭蛋</h2><span class="small">已抽 '+state.draws+' 次</span></div><p class="note">不收费，不限次数；里面装着各种小纸条。</p><div class="capsule"><div class="big">'+(c?c[0]:"🎁")+'</div>'+(c?'<div class="tag">'+c[1]+'</div><h3>'+c[2]+'</h3><p class="description">'+c[3]+'</p>':'<h3>一颗尚未开启的扭蛋</h3><p class="description">会藏着情话、灵感或一颗山楂糖吗？</p>')+'<button type="button" class="action" data-gacha>'+(c?"再抽一颗 ♡":"开启第一颗扭蛋")+'</button></div><p class="small center">所有抽取都是免费虚拟奖励；没有真实奖品或消费。</p>';
+}
+function renderSleep(){
+let checked=state.charges.filter(x=>Object.hasOwn(sleepy,x)).length;
+$("content").innerHTML='<h2>晚安充电站</h2><p class="note">请领走今晚的抱抱、亲亲和小被子。</p><div class="sleep"><div class="big">'+(checked===3?"😴":checked?"😽":"🥺")+'</div><strong>晚安能量 '+checked+' / 3</strong><div class="bar"><span style="width:'+(checked/3*100)+'%"></span></div><div class="sleep-actions">'+[["hug","🫂","抱抱"],["kiss","💋","亲亲"],["blanket","🛏️","盖被被"]].map(x=>'<button type="button" data-charge="'+x[0]+'" class="'+(state.charges.includes(x[0])?"selected":"")+'"><span>'+x[1]+'</span>'+x[2]+(state.charges.includes(x[0])?" ✓":"")+'</button>').join("")+'</div><div class="message" id="sleep-message">'+(checked===3?"（把灯关小，轻轻搂住你）今晚的小猫已经充电完毕。手机也该休息了。♡":"三项服务随时都可以领，领完就让眼睛休息啦。")+'</div><p class="small">这是温柔的小仪式，不是系统闹钟。</p><button type="button" class="action secondary" data-reset-sleep>再要一轮抱抱</button></div>';
+}
+document.querySelector(".nav").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;tab=b.dataset.tab;render();});
+$("content").addEventListener("click",e=>{
+const b=e.target.closest("button");if(!b)return;
+if(b.dataset.claim){const t=tasks.find(x=>x.id===b.dataset.claim);if(t&&state.claimed[t.id]!==today()){state.claimed[t.id]=today();state.xp=Math.max(0,Number(state.xp)||0)+t.xp;save();render();}}
+else if(b.dataset.style){state.style=b.dataset.style;state.outfit=0;save();render();}
+else if(b.dataset.move){state.outfit=(Number(state.outfit)+Number(b.dataset.move)+3)%3;save();render();}
+else if(b.hasAttribute("data-gacha")){let r;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0]/4294967296;}catch(e){r=Math.random();}let next=Math.floor(r*capsules.length);if(next===state.lastCapsule)next=(next+1)%capsules.length;state.lastCapsule=next;state.draws=(Number(state.draws)||0)+1;save();render();}
+else if(b.dataset.charge){if(!state.charges.includes(b.dataset.charge))state.charges.push(b.dataset.charge);save();render();const box=$("sleep-message");if(box&&state.charges.length!==3)box.textContent=sleepy[b.dataset.charge];}
+else if(b.hasAttribute("data-reset-sleep")){state.charges=[];save();render();}
+});
+save();render();
+})();
+</script>
+</body>
+</html>
