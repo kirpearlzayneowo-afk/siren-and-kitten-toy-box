@@ -3,23 +3,50 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#262d43"><title>猫猫游乐厅 · SIREN CATVERSE</title>
 <style>
-:root{color-scheme:dark;--ink:#fff7fb;--muted:#cdd4e6;--pink:#eac4d9;--blue:#c3d8e8;--panel:#303c54;--border:#637089}
-*{box-sizing:border-box}html{min-height:100%;background:#1d2639}body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 80% 0,#493e60,transparent 47%),#1d2639}
-main{max-width:730px;margin:auto;padding:16px 13px 60px}.back{display:inline-block;color:#f4d7e4;text-decoration:none;font-size:13px;margin-bottom:12px}.top{background:#2d3951;border:1px solid #57677f;border-radius:21px;padding:20px;margin-bottom:12px}.eyebrow{letter-spacing:.15em;color:var(--pink);font-size:11px}.top h1{font-size:27px;line-height:1.3;margin:7px 0}.sub{color:var(--muted);font-size:13px;margin:0}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.tabs button{border-radius:15px;padding:12px;background:#34435d;border:1px solid #74819c;color:var(--ink)}.tabs button[aria-selected=true]{background:#5b536e;border-color:#f2cae0;box-shadow:inset 0 -3px 0 #ebbad5;font-weight:700}
-.game{border:1px solid #5c6c83;background:var(--panel);padding:13px;border-radius:21px}.hud{display:flex;gap:8px;margin-bottom:10px}.stat{flex:1;min-width:0;border-radius:12px;background:#404e66;padding:7px 10px}.stat small{display:block;font-size:11px;color:#d1d9e7}.stat b{font-size:20px;font-variant-numeric:tabular-nums}canvas{width:100%;height:auto;display:block;border-radius:15px;background:#29364f;touch-action:manipulation;cursor:crosshair}
-.control{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:12px}button{font:inherit;cursor:pointer}button:disabled{opacity:.54;cursor:default}.primary{border:0;background:#e7bfd5;color:#332d3b;font-weight:700;border-radius:12px;padding:11px 16px}.secondary{border:1px solid #879ab4;background:#42546e;border-radius:12px;padding:10px 14px;color:white}.primary:focus-visible,.secondary:focus-visible,.tabs button:focus-visible{outline:3px solid #f6dfae;outline-offset:2px}
-.instructions{font-size:12px;color:#d5deee;margin:12px 2px 3px;text-align:center;min-height:35px}.toast{height:23px;text-align:center;color:#f2d1e1;font-size:12px}.footer{color:#abbdd3;text-align:center;font-size:12px;margin:18px 4px}
+:root{
+  color-scheme:dark;
+  --ink:#fff7fb;--muted:#cdd4e6;--pink:#e7bbd3;--blue:#b9d4e8;
+  --gold:#f7dcaa;--panel:#29344c;--border:#65728d
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:#171e30}
+body{margin:0;font:15px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 82% -8%,#5e4b66,transparent 40%),radial-gradient(ellipse at 5% 58%,#2e4860,transparent 55%),#171e30}
+main{max-width:730px;margin:auto;padding:16px 13px 60px}
+.back{display:inline-block;color:var(--pink);text-decoration:none;font-size:13px;margin-bottom:13px}
+.back:hover{text-decoration:underline}
+.top{position:relative;overflow:hidden;background:#2d3951;border:1px solid #6e6a88;border-radius:24px;padding:23px 20px;margin-bottom:13px;box-shadow:0 13px 30px #080d1d55}
+.top::after{content:"✦  ✧  ✦";position:absolute;right:-3px;top:3px;transform:rotate(16deg);font-size:24px;letter-spacing:12px;color:#e2bbd0;opacity:.32;pointer-events:none}
+.eyebrow{letter-spacing:.15em;color:var(--pink);font-size:11px;font-weight:700}
+.top h1{font-size:28px;line-height:1.25;margin:10px 0 9px}
+.sub{color:var(--muted);font-size:13px;margin:0;max-width:450px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:13px 0}
+.tabs button{border-radius:15px;padding:12px;background:#34435d;border:1px solid #74819c;color:var(--ink);transition:background .15s ease}
+.tabs button[aria-selected=true]{background:#615572;border-color:#f2cae0;box-shadow:inset 0 -3px 0 #e8b7d0;font-weight:700}
+.game{border:1px solid #686b88;background:var(--panel);padding:13px;border-radius:22px}
+.hud{display:flex;gap:8px;margin-bottom:12px}
+.stat{flex:1;min-width:0;border-radius:12px;background:#3e4d68;padding:8px 10px;border:1px solid #647188}
+.stat small{display:block;font-size:11px;color:#d1d9e7}.stat b{font-size:21px;font-variant-numeric:tabular-nums}
+canvas{width:100%;height:auto;display:block;border:4px solid #e6bdd3;box-shadow:0 0 0 4px #5c526e,0 13px 21px #060a1644;border-radius:22px;background:#29364f;touch-action:manipulation;cursor:crosshair}
+.control{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:15px}
+button{font:inherit;cursor:pointer}
+button:disabled{opacity:.54;cursor:default}
+.primary{border:0;background:var(--pink);color:#332d3b;font-weight:700;border-radius:12px;padding:11px 16px;min-width:150px}
+.secondary{border:1px solid #92a4bf;background:#435573;border-radius:12px;padding:10px 14px;color:white}
+.primary:focus-visible,.secondary:focus-visible,.tabs button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.instructions{font-size:12px;color:#dce3f1;margin:15px 2px 4px;text-align:center;min-height:35px}
+.toast{min-height:24px;text-align:center;color:#f2d1e1;font-size:12px;margin-top:7px}
+.footer{color:#afbbd0;text-align:center;font-size:12px;margin:20px 4px}
 @media(min-width:550px){.game{padding:20px}.arena{max-width:400px;margin:0 auto}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media(max-width:420px){main{padding:12px 10px 48px}.top{padding:18px 15px}.top h1{font-size:26px}.game{padding:11px}.stat{padding:8px 5px}.stat b{font-size:19px}.control{gap:6px}.primary,.secondary{padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style></head><body><main>
 <a class="back" href="./index.html">← 回到猫猫宇宙</a>
-<header class="top"><div class="eyebrow">SIREN · CATVERSE / ARCADE</div><h1>猫猫游乐厅 🎠</h1><p class="sub">弹珠叮叮当当，小鱼游来游去。每局免费玩，不用金币，也不用打卡。</p></header>
+<header class="top"><div class="eyebrow">SIREN · CATVERSE / ARCADE</div><h1>月光游园会 🎠</h1><p class="sub">两台粉蓝配色的小机器，一轮弹珠，一池小鱼。入场券是一个亲亲。♡</p></header>
 <nav class="tabs" aria-label="选择游戏"><button type="button" data-game="pin" aria-selected="true">🔮 弹珠机</button><button type="button" data-game="fish" aria-selected="false">🐟 小鱼套圈圈</button></nav>
 <section class="game" aria-label="游乐厅">
 <div class="hud"><div class="stat"><small>本局得分</small><b id="score">0</b></div><div class="stat"><small>历史最高</small><b id="best">0</b></div><div class="stat"><small id="count-label">剩余弹珠</small><b id="remaining">5</b></div></div>
 <div class="arena"><canvas id="board" width="360" height="520" role="img" aria-label="游戏画面：可以用手指点击互动。">请使用支持 Canvas 的浏览器。</canvas>
-<div class="control"><button type="button" id="fire" class="primary">发射弹珠 ♡</button><button type="button" id="reset" class="secondary">重新开局 ↻</button></div></div>
+<div class="control"><button type="button" id="fire" class="primary">发射弹珠 ♡</button><button type="button" id="reset" class="secondary">重新开局 ↻</button><button type="button" id="sound" class="secondary" aria-pressed="false" aria-label="打开或关闭游戏音效">🔇 音效</button></div></div>
 <p id="instructions" class="instructions">点一下顶端调整发射方向，然后按「发射弹珠」。弹珠撞到圆钉会弹开，落进格子就得分！</p>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </section>
@@ -31,6 +58,21 @@ const canvas=document.getElementById("board"),ctx=canvas.getContext("2d");if(!ct
 const W=360,H=520,storeKey="siren-catverse-v1";const scoreNode=document.getElementById("score"),bestNode=document.getElementById("best"),remainingNode=document.getElementById("remaining"),labelNode=document.getElementById("count-label"),instructions=document.getElementById("instructions"),fireButton=document.getElementById("fire"),toast=document.getElementById("toast");
 const $=q=>document.querySelector(q), clamp=(v,min,max)=>Math.max(min,Math.min(max,v)),rand=(a,b)=>a+Math.random()*(b-a);
 let mode="pin",score=0,shots=0,balls=[],rings=[],fish=[],floats=[],aimX=W/2,aimY=250,frame=0,accum=0,last=0,hitCount=0;
+let soundOn=false,audioCtx=null;
+function playTone(freq=520,duration=.055){
+if(!soundOn)return;
+try{
+const AC=window.AudioContext||window.webkitAudioContext;
+if(!AC)return;
+audioCtx=audioCtx||new AC();
+if(audioCtx.state==="suspended")audioCtx.resume();
+const oscillator=audioCtx.createOscillator(),gain=audioCtx.createGain(),time=audioCtx.currentTime;
+oscillator.type="sine";oscillator.frequency.setValueAtTime(freq,time);
+gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(.065,time+.012);gain.gain.exponentialRampToValueAtTime(.0001,time+duration);
+oscillator.connect(gain);gain.connect(audioCtx.destination);oscillator.start(time);oscillator.stop(time+duration+.015);
+}catch(e){soundOn=false;document.getElementById("sound").textContent="🔇 音效";}
+}
+
 const MAX_PIN=5,MAX_RING=10,pinValues=[10,25,60,100,60,25,10],pegs=[];
 for(let row=0;row<7;row++){const cols=row%2?6:7;const spacing=45,offset=(W-(cols-1)*spacing)/2;for(let col=0;col<cols;col++)pegs.push({x:offset+col*spacing,y:140+row*44,r:6});}
 function loaded(){try{return JSON.parse(localStorage.getItem(storeKey)||"{}")||{};}catch(e){return {};}}
@@ -39,37 +81,64 @@ function writeBest(value){try{const state=loaded();state.arcadeBest=state.arcade
 function say(t){toast.textContent=t;}
 function bubbles(x,y,text,color="#ffe6f3"){floats.push({x,y,text,color,ttl:1.25});}
 function updateHud(){scoreNode.textContent=score;bestNode.textContent=getBest();remainingNode.textContent=(mode==="pin"?MAX_PIN:MAX_RING)-shots;labelNode.textContent=mode==="pin"?"剩余弹珠":"剩余圈圈";fireButton.textContent=mode==="pin"?"发射弹珠 ♡":"往瞄准点扔圈 ♡";fireButton.disabled=(mode==="pin"?shots>=MAX_PIN:shots>=MAX_RING);}
-function addScore(value,x,y){score+=value;if(score>getBest())writeBest(score);bubbles(x,y,"+"+value,value>=60?"#ffe4a4":"#ffe6f3");updateHud();}
+function addScore(value,x,y){playTone(value>=60?820:650,.13);score+=value;if(score>getBest())writeBest(score);bubbles(x,y,"+"+value,value>=60?"#ffe4a4":"#ffe6f3");updateHud();}
 function makeFish(){fish=[];for(let i=0;i<5;i++)fish.push({x:rand(38,320),y:155+i*67,baseY:155+i*67,dir:i%2?-1:1,speed:rand(23,40),phase:rand(0,6.28),color:["#f6c2d4","#f8dfa4","#b9d8e9","#d7c4f0","#b8dfd3"][i],caught:0});}
 function resetGame(){score=0;shots=0;balls=[];rings=[];floats=[];hitCount=0;aimX=180;aimY=270;if(mode==="fish")makeFish();updateHud();say("");}
 function selectGame(m){mode=m;document.querySelectorAll("[data-game]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.game===m)));instructions.textContent=m==="pin"?"点击弹珠机顶部选择发射位置，再按发射。撞击圆钉、落入得分槽，好运叮当响！":"点击水里的位置扔圈，圈落下时套中游动的小鱼就得分。也可以用方向键瞄准、空格键发射。";resetGame();}
-function fire(){if(mode==="pin"){if(shots>=MAX_PIN)return;balls.push({x:clamp(aimX,14,346),y:50,vx:rand(-16,16),vy:0,r:8,hitTime:0});shots++;}else{if(shots>=MAX_RING)return;rings.push({x:180,y:510,tx:clamp(aimX,15,345),ty:clamp(aimY,115,465),t:0,finished:false});shots++;}updateHud();}
+function fire(){playTone(mode==="pin"?470:560,.09);if(mode==="pin"){if(shots>=MAX_PIN)return;balls.push({x:clamp(aimX,14,346),y:50,vx:rand(-16,16),vy:0,r:8,hitTime:0});shots++;}else{if(shots>=MAX_RING)return;rings.push({x:180,y:510,tx:clamp(aimX,15,345),ty:clamp(aimY,115,465),t:0,finished:false});shots++;}updateHud();}
 function line(x1,y1,x2,y2,color,width=1){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
 function circle(x,y,r,fill,stroke){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}}
 function roundRect(x,y,w,h,r,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
 function text(t,x,y,size,color,align="center"){ctx.textAlign=align;ctx.textBaseline="middle";ctx.fillStyle=color;ctx.font="600 "+size+"px -apple-system, BlinkMacSystemFont, sans-serif";ctx.fillText(t,x,y);}
 function drawBackdrop(){
-const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,mode==="pin"?"#453955":"#325b76");g.addColorStop(1,mode==="pin"?"#292f4c":"#28475b");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-for(let i=0;i<25;i++){let x=(i*83+37)%W,y=(i*131+frame*.12*(i%2?1:-1))%H;circle(x,(y+H)%H,mode==="pin"?1.7:2.5,mode==="pin"?"#a89aaf77":"#bce4ee55");}
-roundRect(9,10,342,66,15,mode==="pin"?"#604d69":"#3a697f");text(mode==="pin"?"✦ 星星弹珠机 ✦":"♡ 月光小鱼塘 ♡",180,30,18,"#fff0f8");text(mode==="pin"?"五颗弹珠，看看会落到哪里":"十个圈圈，套住游动的小鱼",180,57,12,"#d9e5f6");
+const g=ctx.createLinearGradient(0,0,0,H);
+g.addColorStop(0,"#333550");g.addColorStop(.52,"#394660");g.addColorStop(1,"#24344d");
+ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+// Both games share one retro carnival kiosk under the same moon.
+circle(312,91,25,"#f2d9b8");circle(324,82,23,"#333c56");
+for(let i=0;i<19;i++){const x=15+(i*57)%330,y=88+(i*79)%405;circle(x,y,i%3===0?1.8:1.1,"#f8e4dbaa");}
+roundRect(7,8,346,69,18,"#66566e");
+roundRect(12,13,336,59,14,"#4b4d6a");
+for(let i=0;i<12;i++){const x=18+i*29.5;circle(x,10,3.3,i%2?"#f4d8a9":"#efbbd7");circle(x,75,3.3,i%2?"#efbbd7":"#f4d8a9");}
+text(mode==="pin"?"✧ 星星弹珠机 ✧":"✧ 月光小鱼塘 ✧",180,34,19,"#fff1f8");
+text(mode==="pin"?"叮叮当当，收集今天的好运":"噗通一声，看看哪条小鱼来啦",180,58,11,"#d9e2f1");
+for(let i=0;i<7;i++) {
+const x=20+i*53;
+circle(x,510,3,i%2?"#f2cae0":"#f8dea8");
+}
 }
 function drawPin(){
-drawBackdrop();roundRect(16,94,328,413,17,"#38405e");roundRect(20,98,320,403,13,"#4d4868");
-ctx.globalAlpha=.75;for(let i=0;i<5;i++)circle(50+i*66,107+(i%2)*6,4,"#b7a8cb");ctx.globalAlpha=1;
-for(const p of pegs){circle(p.x,p.y,p.r+2,"#554d70");circle(p.x,p.y,p.r,"#edc3d9","#fff4fb");circle(p.x-2,p.y-2,1.6,"#ffffff");}
-const slotY=464;for(let i=0;i<7;i++){const x=20+i*(320/7);line(x,slotY,x,501,"#dbbad9",3);}line(20,501,340,501,"#d9c1e5",2);
-for(let i=0;i<7;i++)text(String(pinValues[i]),20+(i+.5)*(320/7),485,13,i===3?"#ffe5a8":"#fff2fa");
-line(aimX,79,aimX,115,"#f7d09c",2);text("▼",aimX,111,15,"#ffedb8");
-for(const b of balls){circle(b.x,b.y,b.r,"#ffeac7","#ffffff");circle(b.x-2,b.y-3,2.5,"#fff");}
+drawBackdrop();
+roundRect(14,92,332,412,19,"#c19bb9");
+roundRect(19,98,322,400,15,"#655a78");
+roundRect(25,104,310,360,12,"#4a506f");
+for(let y=116;y<451;y+=62){line(25,y,335,y,"#e2c8df21",1);}
+for(const p of pegs){
+circle(p.x,p.y,p.r+4,"#9e83a9");circle(p.x,p.y,p.r+1,"#f1c8dd","#fff7ee");
+circle(p.x-2,p.y-2,1.5,"#fff");
+}
+roundRect(21,461,318,36,5,"#82708b");
+for(let i=0;i<7;i++){
+const slotX=21+i*318/7;
+if(i<6)line(slotX+318/7,461,slotX+318/7,497,"#f3d6e4",3);
+if(i===3)roundRect(slotX+3,464,318/7-6,30,5,"#ae819d");
+text(String(pinValues[i]),slotX+318/14,480,13,i===3?"#ffedbb":"#fff0f8");
+}
+line(aimX,78,aimX,112,"#ffe3ac",2);text("▼",aimX,110,16,"#ffedac");
+for(const b of balls){
+const marble=ctx.createRadialGradient(b.x-3,b.y-3,1,b.x,b.y,10);
+marble.addColorStop(0,"#fffdf6");marble.addColorStop(.55,"#ffe5b7");marble.addColorStop(1,"#ddacc7");
+circle(b.x,b.y,b.r,marble,"#fff4fa");circle(b.x-2,b.y-3,2,"#fff");
+}
 }
 function updatePin(dt){
 const remove=[];
 for(const ball of balls){
-ball.vy+=640*dt;ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;
+ball.hitTime=Math.max(0,ball.hitTime-dt);ball.vy+=640*dt;ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;
 if(ball.x<29+ball.r){ball.x=29+ball.r;ball.vx=Math.abs(ball.vx)*.72;}if(ball.x>331-ball.r){ball.x=331-ball.r;ball.vx=-Math.abs(ball.vx)*.72;}
 for(const p of pegs){
 const dx=ball.x-p.x,dy=ball.y-p.y,dist=Math.hypot(dx,dy),size=ball.r+p.r;
-if(dist<size&&dist>0.01){const nx=dx/dist,ny=dy/dist,overlap=size-dist;ball.x+=nx*(overlap+.2);ball.y+=ny*(overlap+.2);const relative=ball.vx*nx+ball.vy*ny;if(relative<0){ball.vx-=1.65*relative*nx;ball.vy-=1.65*relative*ny;ball.vx+=nx*8;}}
+if(dist<size&&dist>0.01){const nx=dx/dist,ny=dy/dist,overlap=size-dist;ball.x+=nx*(overlap+.2);ball.y+=ny*(overlap+.2);const relative=ball.vx*nx+ball.vy*ny;if(relative<0){ball.vx-=1.65*relative*nx;ball.vy-=1.65*relative*ny;ball.vx+=nx*8;if(ball.hitTime<=0){playTone(720,.025);ball.hitTime=.14;}}}
 }
 if(ball.y>460){for(let i=1;i<7;i++){const edge=20+i*(320/7);if(Math.abs(ball.x-edge)<ball.r+1){ball.x=edge+(ball.x<edge?-1:1)*(ball.r+1);ball.vx*=-.55;}}}
 ball.vx=clamp(ball.vx,-245,245);
@@ -79,19 +148,43 @@ balls=balls.filter(b=>!remove.includes(b));
 if(shots===MAX_PIN&&balls.length===0&&remove.length)say("本局结束！得了 "+score+" 分。按「重新开局」再玩一轮。");
 }
 function fishShape(f){
-const {x,y,color,dir}=f;ctx.save();ctx.translate(x,y);ctx.scale(dir,1);
-ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(-19,0);ctx.lineTo(-39,-14);ctx.lineTo(-37,13);ctx.closePath();ctx.fill();
-ctx.beginPath();ctx.ellipse(0,0,23,16,0,0,Math.PI*2);ctx.fill();
-ctx.fillStyle="#ffffffcc";ctx.beginPath();ctx.ellipse(-4,5,10,5,-.2,0,Math.PI*2);ctx.fill();
-circle(11,-4,3,"#273f54");circle(12,-5,1,"#fff");circle(0,-15,5,color);ctx.restore();
+// Plush, round goldfish with a pointed tail and tiny rosy cheeks.
+ctx.save();ctx.translate(f.x,f.y);ctx.scale(f.dir,1);
+ctx.fillStyle=f.color;
+ctx.beginPath();ctx.moveTo(-15,1);ctx.quadraticCurveTo(-33,-22,-39,-12);ctx.quadraticCurveTo(-32,0,-41,14);ctx.quadraticCurveTo(-24,18,-15,5);ctx.fill();
+ctx.beginPath();ctx.ellipse(0,0,22,18,0,0,Math.PI*2);ctx.fill();
+ctx.beginPath();ctx.moveTo(-8,-12);ctx.quadraticCurveTo(-2,-26,7,-18);ctx.quadraticCurveTo(3,-11,-2,-9);ctx.fill();
+ctx.beginPath();ctx.ellipse(-3,8,12,6,-.25,0,Math.PI*2);ctx.fillStyle="#ffffff55";ctx.fill();
+circle(12,-4,3.4,"#28384a");circle(13,-5,1.25,"#fff");
+circle(16,5,3.1,"#e59baa99");
+ctx.strokeStyle="#627284";ctx.lineWidth=1.15;ctx.beginPath();ctx.arc(20,1,3,1.2,2.5);ctx.stroke();
+ctx.restore();
 }
 function drawFish(){
-drawBackdrop();roundRect(15,92,330,409,19,"#356b7f");for(let i=0;i<8;i++){const yy=115+i*48;line(20,yy,340,yy,"#aadce71e",1);}
-for(let i=0;i<12;i++){const x=25+(i*79)%310,y=125+(i*101+frame*.25)%345;circle(x,y,2+(i%3),"#b9e7e455");}
-for(const f of fish)fishShape(f);
-for(const r of rings){const progress=clamp(r.t/.7,0,1),x=180+(r.tx-180)*progress,y=510+(r.ty-510)*progress-105*Math.sin(Math.PI*progress),radius=22-7*progress;circle(x,y,radius,null,"#ffe3ad");circle(x,y,radius+3,null,"#f9c4d7");}
-circle(aimX,aimY,16,null,"#ffe6b5");line(aimX-25,aimY,aimX-19,aimY,"#ffe6b5",2);line(aimX+19,aimY,aimX+25,aimY,"#ffe6b5",2);line(aimX,aimY-25,aimX,aimY-19,"#ffe6b5",2);line(aimX,aimY+19,aimX,aimY+25,"#ffe6b5",2);
-text("✦",25,475,16,"#f2bcd0");text("✦",336,125,14,"#f2bcd0");
+drawBackdrop();
+roundRect(13,91,334,412,22,"#c7a0be");
+roundRect(20,99,320,395,19,"#426c84");
+roundRect(26,105,308,381,16,"#467e95");
+for(let i=0;i<8;i++){const y=121+i*46;line(27,y,334,y,"#d5f1f028",1);}
+for(let i=0;i<15;i++){
+const x=34+(i*73)%280,y=118+(i*101+frame*.27)%344;
+circle(x,y,2+(i%3),"#d6f4f24c");
+}
+for(const f of fish){
+circle(f.x,f.y+16,22,"#17394a30");
+fishShape(f);
+if(f.caught>0){text("✦",f.x,f.y-26,18,"#ffefb6");}
+}
+for(const r of rings){
+const t=clamp(r.t/.7,0,1),x=180+(r.tx-180)*t,y=510+(r.ty-510)*t-105*Math.sin(Math.PI*t),rad=22-7*t;
+circle(x,y,rad,null,"#ffebc3");circle(x,y,rad+4,null,"#edbbd4");
+}
+circle(aimX,aimY,16,null,"#ffe6b5");
+line(aimX-25,aimY,aimX-20,aimY,"#ffe6b5",2);
+line(aimX+20,aimY,aimX+25,aimY,"#ffe6b5",2);
+line(aimX,aimY-25,aimX,aimY-20,"#ffe6b5",2);
+line(aimX,aimY+20,aimX,aimY+25,"#ffe6b5",2);
+text("✦",33,472,15,"#f2bcd0");text("✦",330,121,13,"#f2bcd0");
 }
 function updateFish(dt){
 for(const f of fish){f.x+=f.dir*f.speed*dt;f.phase+=dt*2;f.y=f.baseY+Math.sin(f.phase)*6;if(f.x<43){f.x=43;f.dir=1;}if(f.x>318){f.x=318;f.dir=-1;}if(f.caught>0)f.caught-=dt;}
@@ -106,7 +199,13 @@ function coords(e){const rect=canvas.getBoundingClientRect();return {x:clamp((e.
 canvas.addEventListener("pointerdown",e=>{const c=coords(e);if(mode==="pin"){if(c.y<135){aimX=clamp(c.x,32,328);say("发射位置调整好啦，按「发射弹珠」！");}else{aimX=clamp(c.x,32,328);fire();}}else{aimX=clamp(c.x,22,338);aimY=clamp(c.y,120,460);fire();}});
 window.addEventListener("keydown",e=>{if(["INPUT","BUTTON"].includes(document.activeElement.tagName))return;if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," ","Enter"].includes(e.key))return;e.preventDefault();if(e.key==="ArrowLeft")aimX=clamp(aimX-16,22,338);else if(e.key==="ArrowRight")aimX=clamp(aimX+16,22,338);else if(e.key==="ArrowUp")aimY=clamp(aimY-16,120,460);else if(e.key==="ArrowDown")aimY=clamp(aimY+16,120,460);else fire();});
 document.querySelectorAll("[data-game]").forEach(b=>b.addEventListener("click",()=>selectGame(b.dataset.game)));
-fireButton.addEventListener("click",fire);document.getElementById("reset").addEventListener("click",resetGame);
+fireButton.addEventListener("click",fire);
+document.getElementById("reset").addEventListener("click",resetGame);
+document.getElementById("sound").addEventListener("click",e=>{
+soundOn=!soundOn;e.currentTarget.setAttribute("aria-pressed",String(soundOn));
+e.currentTarget.textContent=soundOn?"🔊 音效开":"🔇 音效";
+if(soundOn)playTone(660,.1);
+});
 selectGame("pin");requestAnimationFrame(loop);
 })();
 </script></body></html>
