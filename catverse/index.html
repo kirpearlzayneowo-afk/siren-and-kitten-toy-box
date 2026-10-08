@@ -37,15 +37,16 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--
 <button type="button" role="tab" id="tab-tidy" aria-controls="content" aria-selected="false" data-tab="tidy"><span class="emoji">🧹</span>收拾床铺</button>
 </nav>
 <a class="arcade-link" href="./arcade.html">🎠 猫猫游乐厅 <span>弹珠机 · 小鱼套圈圈 →</span></a>
+<a class="arcade-link" href="./pomodoro.html">🍅 沈砚的番茄钟 <span>专注、暂停、喝水歇歇 →</span></a>
 <section class="panel" id="content" role="tabpanel" aria-labelledby="tab-art" aria-live="polite"></section>
 <div class="storage" aria-label="存档管理"><button id="backup" type="button">📤 导出存档</button><button id="restore" type="button">📥 导入存档</button><input class="sr-input" id="backup-file" type="file" accept=".json,application/json" aria-label="选择猫猫宇宙存档"></div><div id="storage-status" class="status" role="status" aria-live="polite"></div>
-<footer class="footer">没有连续打卡惩罚，也没有欠下的任务。猫猫想玩就来。<br>SIREN · CATVERSE v0.2 · 进度只存在当前浏览器，记得偶尔备份</footer>
+<footer class="footer">没有连续打卡惩罚，也没有欠下的任务。猫猫想玩就来。<br>SIREN · CATVERSE · 番茄钟与小游戏的完成次数也会存档</footer>
 </main>
 <script>
 (function(){
 "use strict";
 const KEY="siren-catverse-v1";
-const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[],tidyDate:"",tidyDone:[],arcadeBest:{pin:0,fish:0}};
+const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[],tidyDate:"",tidyDone:[],arcadeBest:{pin:0,fish:0},pomoTotal:0,pomoToday:0,pomoDate:""};
 let state={...defaults,claimed:{},charges:[],tidyDone:[]};
 try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object"){state={...defaults,...saved,claimed:saved.claimed&&typeof saved.claimed==="object"?saved.claimed:{},charges:Array.isArray(saved.charges)?saved.charges:[]};}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.querySelector(".footer").textContent="浏览器不允许保存数据；当前页面可以玩，但刷新后进度可能丢失。";}}
@@ -80,7 +81,9 @@ const claimed={};for(const id of ["face","skull","doodle"]){if(typeof raw.claime
 const charges=Array.isArray(raw.charges)?[...new Set(raw.charges.filter(v=>["hug","kiss","blanket"].includes(v)))]:[];
 const tidyDone=Array.isArray(raw.tidyDone)?[...new Set(raw.tidyDone.filter(v=>tidySteps.some(x=>x.id===v)))]:[];
 const arcadeBest={pin:safeInt(raw.arcadeBest?.pin,0,10000000,0),fish:safeInt(raw.arcadeBest?.fish,0,10000000,0)};
-return {xp:safeInt(raw.xp,0,1000000,0),claimed,style:["lolita","hanfu","daily"].includes(raw.style)?raw.style:"lolita",outfit:safeInt(raw.outfit,0,2,0),draws:safeInt(raw.draws,0,1000000,0),lastCapsule:safeInt(raw.lastCapsule,-1,7,-1),charges,tidyDate:typeof raw.tidyDate==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(raw.tidyDate)?raw.tidyDate:"",tidyDone,arcadeBest};
+const pomoDate=typeof raw.pomoDate==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(raw.pomoDate)?raw.pomoDate:"";
+const pomoTotal=safeInt(raw.pomoTotal,0,1000000,0),pomoToday=safeInt(raw.pomoToday,0,1000000,0);
+return {xp:safeInt(raw.xp,0,1000000,0),claimed,style:["lolita","hanfu","daily"].includes(raw.style)?raw.style:"lolita",outfit:safeInt(raw.outfit,0,2,0),draws:safeInt(raw.draws,0,1000000,0),lastCapsule:safeInt(raw.lastCapsule,-1,7,-1),charges,tidyDate:typeof raw.tidyDate==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(raw.tidyDate)?raw.tidyDate:"",tidyDone,arcadeBest,pomoTotal,pomoToday,pomoDate};
 }
 state=cleanState(state);
 const $=id=>document.getElementById(id);
