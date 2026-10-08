@@ -1,0 +1,19 @@
+{
+  "id": "./index.html",
+  "name": "CATVERSE · 猫猫宇宙",
+  "short_name": "猫猫宇宙",
+  "description": "月光游园会，画画、换装、扭蛋与小鱼套圈圈。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#171e30",
+  "theme_color": "#29344c",
+  "icons": [
+    {
+      "src": "./catverse-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
