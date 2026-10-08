@@ -18,7 +18,7 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--
 .outfit,.capsule,.sleep{text-align:center;background:#39435e;border:1px solid #68738c;border-radius:20px;padding:18px;margin:14px 0}.big{font-size:68px;line-height:1.25;margin:10px 0}.outfit h3,.capsule h3{font-size:22px;margin:7px 0}.tag{color:var(--pink);font-size:12px;letter-spacing:.07em}.description{color:#ebdfef;font-size:14px;margin:12px auto;max-width:450px}.controls{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px}.capsule{min-height:285px}.center{text-align:center}.sleep-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}.sleep-actions button{border:1px solid #74708f;border-radius:15px;background:#49445f;color:white;padding:14px 5px}.sleep-actions span{display:block;font-size:27px}.sleep-actions button.selected{background:#725870;border-color:#e6c1d7}.message{background:#454362;border-radius:15px;padding:15px;color:#fff0f5;min-height:74px}.footer{text-align:center;margin:20px 0;color:#aeb9cc;font-size:12px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:430px){.app{padding:14px 10px 45px}.head{padding:18px 15px}.head h1{font-size:25px}.panel{padding:14px}.task{gap:8px;padding:12px 9px}.action{font-size:12px;padding:9px 10px}.nav button{font-size:11px}.level{padding:13px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
-.storage{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:15px 0 9px}.storage button{font-size:12px;background:#344460;border:1px solid #75829d;color:#f7eef5;border-radius:12px;padding:9px 12px}.storage button:active{transform:scale(.97)}.status{min-height:23px;color:#dfc8d9;font-size:12px;text-align:center}.tidy-progress{text-align:center;background:#39455f;border:1px solid #6c7890;border-radius:19px;padding:22px 15px;margin-top:15px}.tidy-progress h3{font-size:21px;margin:10px 0 5px}.tidy-progress .big{font-size:61px}.tidy-progress .action{margin-top:13px}.tidy-progress .controls{justify-content:center}.tidy-progress .bar{max-width:370px;margin:14px auto 5px}.done-message{font-size:12px;color:var(--blue)}.sr-input{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.arcade-link{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#fff6fa;border:1px solid #dfb9d1;background:#605570;padding:12px 15px;margin:0 0 15px;border-radius:16px;font-weight:700}.arcade-link span{font-weight:400;font-size:12px;color:#f7d8e8}.arcade-link:focus-visible{outline:3px solid #f6dfae;outline-offset:3px}.storage{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:15px 0 9px}.storage button{font-size:12px;background:#344460;border:1px solid #75829d;color:#f7eef5;border-radius:12px;padding:9px 12px}.storage button:active{transform:scale(.97)}.status{min-height:23px;color:#dfc8d9;font-size:12px;text-align:center}.tidy-progress{text-align:center;background:#39455f;border:1px solid #6c7890;border-radius:19px;padding:22px 15px;margin-top:15px}.tidy-progress h3{font-size:21px;margin:10px 0 5px}.tidy-progress .big{font-size:61px}.tidy-progress .action{margin-top:13px}.tidy-progress .controls{justify-content:center}.tidy-progress .bar{max-width:370px;margin:14px auto 5px}.done-message{font-size:12px;color:var(--blue)}.sr-input{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @media(max-width:430px){.nav{gap:4px}.nav button{font-size:10px;padding:10px 1px}.nav .emoji{font-size:20px}}
 </style>
 </head>
@@ -32,6 +32,7 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--
 <button type="button" role="tab" id="tab-sleep" aria-controls="content" aria-selected="false" data-tab="sleep"><span class="emoji">🌙</span>晚安充电</button>
 <button type="button" role="tab" id="tab-tidy" aria-controls="content" aria-selected="false" data-tab="tidy"><span class="emoji">🧹</span>收拾床铺</button>
 </nav>
+<a class="arcade-link" href="./arcade.html">🎠 猫猫游乐厅 <span>弹珠机 · 小鱼套圈圈 →</span></a>
 <section class="panel" id="content" role="tabpanel" aria-labelledby="tab-art" aria-live="polite"></section>
 <div class="storage" aria-label="存档管理"><button id="backup" type="button">📤 导出存档</button><button id="restore" type="button">📥 导入存档</button><input class="sr-input" id="backup-file" type="file" accept=".json,application/json" aria-label="选择猫猫宇宙存档"></div><div id="storage-status" class="status" role="status" aria-live="polite"></div>
 <footer class="footer">没有连续打卡惩罚，也没有欠下的任务。猫猫想玩就来。<br>SIREN · CATVERSE v0.2 · 进度只存在当前浏览器，记得偶尔备份</footer>
@@ -40,7 +41,7 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--
 (function(){
 "use strict";
 const KEY="siren-catverse-v1";
-const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[],tidyDate:"",tidyDone:[]};
+const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[],tidyDate:"",tidyDone:[],arcadeBest:{pin:0,fish:0}};
 let state={...defaults,claimed:{},charges:[],tidyDone:[]};
 try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&typeof saved==="object"){state={...defaults,...saved,claimed:saved.claimed&&typeof saved.claimed==="object"?saved.claimed:{},charges:Array.isArray(saved.charges)?saved.charges:[]};}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.querySelector(".footer").textContent="浏览器不允许保存数据；当前页面可以玩，但刷新后进度可能丢失。";}}
@@ -74,7 +75,8 @@ if(!raw||typeof raw!=="object"||Array.isArray(raw))throw new Error("存档格式
 const claimed={};for(const id of ["face","skull","doodle"]){if(typeof raw.claimed?.[id]==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(raw.claimed[id]))claimed[id]=raw.claimed[id];}
 const charges=Array.isArray(raw.charges)?[...new Set(raw.charges.filter(v=>["hug","kiss","blanket"].includes(v)))]:[];
 const tidyDone=Array.isArray(raw.tidyDone)?[...new Set(raw.tidyDone.filter(v=>tidySteps.some(x=>x.id===v)))]:[];
-return {xp:safeInt(raw.xp,0,1000000,0),claimed,style:["lolita","hanfu","daily"].includes(raw.style)?raw.style:"lolita",outfit:safeInt(raw.outfit,0,2,0),draws:safeInt(raw.draws,0,1000000,0),lastCapsule:safeInt(raw.lastCapsule,-1,7,-1),charges,tidyDate:typeof raw.tidyDate==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(raw.tidyDate)?raw.tidyDate:"",tidyDone};
+const arcadeBest={pin:safeInt(raw.arcadeBest?.pin,0,10000000,0),fish:safeInt(raw.arcadeBest?.fish,0,10000000,0)};
+return {xp:safeInt(raw.xp,0,1000000,0),claimed,style:["lolita","hanfu","daily"].includes(raw.style)?raw.style:"lolita",outfit:safeInt(raw.outfit,0,2,0),draws:safeInt(raw.draws,0,1000000,0),lastCapsule:safeInt(raw.lastCapsule,-1,7,-1),charges,tidyDate:typeof raw.tidyDate==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(raw.tidyDate)?raw.tidyDate:"",tidyDone,arcadeBest};
 }
 state=cleanState(state);
 const $=id=>document.getElementById(id);
