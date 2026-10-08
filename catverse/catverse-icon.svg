@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="月亮下的粉色猫猫">
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#353850"/><stop offset="1" stop-color="#5b536f"/></linearGradient>
+    <linearGradient id="kitty" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5d7e5"/><stop offset="1" stop-color="#d9a9cc"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="118" fill="url(#night)"/>
+  <path d="M362 81c-54 14-82 85-42 128 23 26 59 27 84 15-14 33-48 60-88 58-57-3-98-46-95-103 3-48 41-89 89-100 21-5 39-5 52 2z" fill="#f8dfa9"/>
+  <path d="M91 306 115 182q11-25 31-5l48 45q64-25 124 0l48-45q20-20 31 5l24 124q4 92-59 134-46 33-106 33t-106-33q-63-42-59-134z" fill="url(#kitty)"/>
+  <path d="M133 232 148 194 186 232zM379 232 364 194 326 232z" fill="#bd85ae" opacity=".7"/>
+  <ellipse cx="196" cy="333" rx="13" ry="17" fill="#353a56"/>
+  <ellipse cx="316" cy="333" rx="13" ry="17" fill="#353a56"/>
+  <circle cx="201" cy="328" r="4" fill="#fff"/>
+  <circle cx="321" cy="328" r="4" fill="#fff"/>
+  <ellipse cx="154" cy="361" rx="22" ry="12" fill="#e9a5b6" opacity=".76"/>
+  <ellipse cx="358" cy="361" rx="22" ry="12" fill="#e9a5b6" opacity=".76"/>
+  <path d="M247 353q9-9 18 0l-9 8z" fill="#8b5e86"/>
+  <path d="M256 360v10m0 0q-18 20-34 0m34 0q18 20 34 0" stroke="#8b5e86" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M133 357 73 343m60 29-60 10m306-25 60-14m-60 29 60 10" stroke="#fff3ec" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+  <path d="m103 96 9 25 25 9-25 9-9 25-9-25-25-9 25-9z" fill="#f7daa9"/>
+  <circle cx="422" cy="119" r="7" fill="#c2dbe7"/>
+</svg>
