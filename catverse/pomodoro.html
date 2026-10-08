@@ -94,7 +94,7 @@ const box=$("#duration");box.replaceChildren();
 for(const m of PRESETS[state.mode]){
 const b=document.createElement("button");b.type="button";b.textContent=m+" 分钟";b.setAttribute("aria-pressed",String(state.minutes===m));
 b.addEventListener("click",()=>{if(state.running&&!confirm("这一轮还在计时，要改成新的时间并重新开始吗？"))return;
-state.minutes=m;state.remainingMs=m*60000;state.running=false;state.endAt=0;state.complete=false;save();render();message("没关系，换个舒服的节奏。");});
+state.minutes=m;state.remainingMs=m*60000;state.running=false;state.endAt=0;state.complete=false;save();renderDurations();render();message("没关系，换个舒服的节奏。");});
 box.appendChild(b);
 }
 }
@@ -107,13 +107,13 @@ $("#face").textContent=state.complete?"🌟":state.mode==="break"?"😴":state.r
 $("#phase").textContent=state.complete?"小祈给你鼓掌":state.mode==="break"?"一起歇歇眼睛":state.running?"我就在旁边陪你":"沈砚陪猫猫坐一会儿";
 $("#toggle").textContent=state.running?"Ⅱ 暂停":state.complete?"▶ 再来一轮":state.remainingMs<total?"▶ 继续":"▶ 开始";
 document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===state.mode)));
-renderDurations();counts();
+counts();
 }
 function changeMode(mode){
 if(mode===state.mode)return;
 if(state.running&&!confirm("这一轮还在计时，要切换并重新开始吗？"))return;
 state.mode=mode;state.minutes=mode==="focus"?25:5;state.remainingMs=state.minutes*60000;state.running=false;state.endAt=0;state.complete=false;
-save();render();message(mode==="break"?"休息也很重要。放下笔，看看远处。":"来，我坐你旁边。先画一小会儿。");
+save();renderDurations();render();message(mode==="break"?"休息也很重要。放下笔，看看远处。":"来，我坐你旁边。先画一小会儿。");
 }
 document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>changeMode(b.dataset.mode)));
 $("#toggle").addEventListener("click",()=>{
@@ -131,7 +131,7 @@ state.running=false;state.endAt=0;state.complete=false;state.remainingMs=state.m
 document.addEventListener("visibilitychange",()=>{sync();save();render()});
 window.addEventListener("pageshow",()=>{sync();render()});
 window.addEventListener("pagehide",()=>{sync();save()});
-sync();save();render();setInterval(()=>{sync();if(state.running)render();else if(state.complete)counts();},500);
+renderDurations();sync();save();render();setInterval(()=>{sync();if(state.running)render();else if(state.complete)counts();},500);
 if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 })();
 </script></body></html>
