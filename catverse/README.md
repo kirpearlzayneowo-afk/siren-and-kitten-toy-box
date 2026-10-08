@@ -25,7 +25,8 @@
 
 ### 给猫猫的部署文件包
 
-- 已有 [CATVERSE-v0.4.zip](dist/CATVERSE-v0.4.zip) **只包含旧版 5 个静态文件，尚不包括新客座游戏馆**。准备好 v0.5 发布包之前，仍请以 v0.4 为独立可上传基线。
+- **最新打包**：[CATVERSE-v0.5.zip](dist/CATVERSE-v0.5.zip)，包含六个独立静态文件（主页、游乐厅、客座游戏馆、图标、manifest、Service Worker），无需把 Aelios 项目整体上传。
+- 旧版 [CATVERSE-v0.4.zip](dist/CATVERSE-v0.4.zip) 仍可用于回退，但不包含客座游戏馆。
 - 使用 Cloudflare Pages 的 Direct Upload 上传该 ZIP，先获得免费的 `*.pages.dev` 试玩网址。别把整个 `siren-memory-lab` 上传！
 - 上线步骤、安全边界和域名选择详见 [DEPLOY.md](DEPLOY.md)。
 - 此包为静态网页原型，尚未进行 iPhone Safari 真机测试。
