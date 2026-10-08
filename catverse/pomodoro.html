@@ -131,7 +131,7 @@ state.running=false;state.endAt=0;state.complete=false;state.remainingMs=state.m
 document.addEventListener("visibilitychange",()=>{sync();save();render()});
 window.addEventListener("pageshow",()=>{sync();render()});
 window.addEventListener("pagehide",()=>{sync();save()});
-renderDurations();sync();save();render();setInterval(()=>{sync();if(state.running)render();else if(state.complete)counts();},500);
+renderDurations();sync();save();render();setInterval(()=>{const wasRunning=state.running;sync();if(wasRunning||state.running)render();else if(state.complete)counts();},500);
 if(("serviceWorker" in navigator)&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 })();
 </script></body></html>
