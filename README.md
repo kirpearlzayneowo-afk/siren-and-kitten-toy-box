@@ -43,7 +43,7 @@ siren-memory-lab/
 
 ## 🗂️ 项目小档案
 
-- **2026-10-09：** CATVERSE 原型，见 [Issue #1](./issues/1)。
+- **2026-10-09：** CATVERSE 原型，见 [Issue #1](https://github.com/kirpearlzayneowo-afk/siren-memory-lab/issues/1)。
 - **2026-10-11：** 刷牙星球加入；收纳盒统一入口上线。
 
 ---
