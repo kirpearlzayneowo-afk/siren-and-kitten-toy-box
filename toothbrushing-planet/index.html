@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#e5f2f5" />
+<title>猫猫的刷牙星球 · 沈砚特调</title>
+<style>
+:root{--ink:#274059;--sub:#698398;--blue:#7aaaca;--blueDeep:#477f9c;--pink:#edb7bf;--cream:#fffdfb;--track:#e5eef2;--shadow:0 18px 54px rgba(69,112,139,.14)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:ui-rounded,"SF Pro Rounded","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
+body{background:radial-gradient(circle at 12% 12%,#fff2f3 0%,transparent 37%),radial-gradient(circle at 91% 76%,#d2e9f3 0%,transparent 38%),linear-gradient(130deg,#eef7f8,#edf0fa 70%,#f9ebef);display:flex;align-items:center;justify-content:center;padding:20px;}
+.app{position:relative;isolation:isolate;overflow:hidden;width:min(100%,470px);padding:30px 27px 20px;background:rgba(255,255,255,.87);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow);border-radius:34px;text-align:center}
+.app:before,.app:after{content:"";position:absolute;border-radius:50%;z-index:-1;pointer-events:none}.app:before{width:240px;height:240px;background:#f4e6ec;filter:blur(36px);right:-135px;top:-105px}.app:after{width:215px;height:215px;background:#e1f2f9;filter:blur(32px);left:-140px;bottom:-70px}
+.topline{font-size:11px;font-weight:800;letter-spacing:2.1px;color:var(--blueDeep)}
+h1{margin:9px 0 4px;font-size:30px;font-weight:850;letter-spacing:1.2px;line-height:1.28}h1 em{font-style:normal;color:#b985a0}
+.lead{margin:0 0 15px;color:var(--sub);font-size:13px;line-height:1.8}
+.mode{display:inline-flex;align-items:center;background:#eef4f6;border:1px solid #e4edef;padding:4px;border-radius:100px;gap:3px}
+.mode button{font:inherit;font-size:12px;font-weight:750;border:0;border-radius:100px;padding:8px 14px;color:#7a90a1;background:transparent;cursor:pointer;transition:.18s}
+.mode button.active{background:#fff;color:#4d819c;box-shadow:0 2px 9px #bbcdd477}.mode button:focus-visible,button:focus-visible{outline:3px solid #8cbacf;outline-offset:3px}
+.timer{position:relative;width:min(83vw,286px);height:min(83vw,286px);margin:13px auto 8px}
+.timer svg.ring{width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
+.timer .track{fill:none;stroke:#e8f0f3;stroke-width:10}.timer .progress{fill:none;stroke:#87b5cd;stroke-width:10;stroke-linecap:round;stroke-dasharray:754;stroke-dashoffset:754;transition:stroke-dashoffset .16s linear,stroke .3s;filter:drop-shadow(0 2px 2px #b1d5e0)}
+.timer:before{content:"";position:absolute;inset:22px;border-radius:50%;background:linear-gradient(150deg,#ffffff,#f4fafb);box-shadow:inset 0 0 0 1px #fff,0 7px 18px #adcdd017}
+.center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.mascot{height:88px;width:100px;position:relative;display:grid;place-items:center;animation:bob 3.5s ease-in-out infinite}.mascot svg{width:100px;height:88px;overflow:visible;filter:drop-shadow(0 5px 4px rgba(87,126,154,.10))}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+.time{font-size:43px;line-height:1;font-weight:850;letter-spacing:1px;font-variant-numeric:tabular-nums;margin:2px 0 4px}.timer-sub{font-size:11px;letter-spacing:.3px;color:var(--sub);font-weight:700}
+.bubble{position:absolute;z-index:2;pointer-events:none;border:1.8px solid #a6cfde;box-shadow:inset 3px 3px 7px #fff;border-radius:50%;opacity:.55;animation:float 4s ease-in-out infinite}.b1{width:15px;height:15px;top:45px;left:17px}.b2{width:9px;height:9px;top:85px;right:10px;animation-delay:-1.3s}.b3{width:20px;height:20px;bottom:65px;left:7px;animation-delay:-2.1s}.b4{width:9px;height:9px;bottom:34px;right:38px;animation-delay:-.8s}@keyframes float{0%,100%{transform:translateY(2px);opacity:.36}50%{transform:translateY(-12px);opacity:.85}}
+.areas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:5px}
+.area{padding:10px 2px 9px;border-radius:13px;background:#f4f7f8;color:#91a3ad;border:1px solid transparent;transition:.2s;min-width:0}.area .symbol{display:block;font-size:20px;margin-bottom:3px}.area .name{font-size:11px;font-weight:780;white-space:nowrap}.area.active{background:#e2f2f8;color:#3f7c9c;border-color:#c8e5f0;box-shadow:0 3px 10px #8fb9cc1a}.area.done{background:#edf6f0;color:#6b9a85}.area.done .symbol{font-size:18px}
+.message{margin-top:16px;min-height:47px}.message strong{display:block;font-size:14px;line-height:1.6}.message span{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:1px}
+.actions{display:flex;gap:10px;margin:16px 0 12px}.actions button{font:inherit;border:0;border-radius:18px;padding:15px 13px;font-weight:850;cursor:pointer;transition:transform .14s,box-shadow .14s}.actions button:active{transform:scale(.97)}.primary{background:linear-gradient(120deg,#6fa7c4,#8aafce);color:#fff;flex:1.7;box-shadow:0 6px 15px #6ea7c356}.secondary{background:#edf3f6;color:#69879a;flex:1}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px dashed #dce8ed;padding-top:14px;font-size:12px;color:#708a9a}.bottom strong{color:#b4879e}.sound{font:inherit;border:0;background:none;color:#67849a;cursor:pointer;font-weight:700;padding:5px}
+.note{font-size:10px;color:#9aabb4;line-height:1.5;margin:12px 0 0}.heart{color:#d8a4b5}
+.celebrate{display:none;position:absolute;inset:0;z-index:5;align-items:center;justify-content:center;flex-direction:column;background:rgba(246,252,254,.96);backdrop-filter:blur(7px);padding:28px;animation:appear .28s ease-out}.celebrate.show{display:flex}@keyframes appear{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
+.reward{font-size:80px;line-height:1.2;animation:jump .85s ease-in-out infinite alternate}@keyframes jump{to{transform:translateY(-15px) rotate(6deg)}}.celebrate h2{font-size:28px;margin:10px 0 5px}.celebrate p{color:#69859a;font-size:14px;line-height:1.8;margin:5px 0 18px}.badge{color:#a17e96;background:#f6e9ef;border:1px solid #eddae3;border-radius:50px;padding:9px 18px;font-size:13px;font-weight:800;margin-bottom:22px}.again{border:0;border-radius:17px;background:#7baac6;color:#fff;padding:15px 32px;font-size:15px;font-weight:800;cursor:pointer}
+.specks{position:absolute;inset:0;overflow:hidden;pointer-events:none}.speck{position:absolute;top:-10%;font-size:20px;animation:fall 3s linear infinite}@keyframes fall{to{transform:translateY(670px) rotate(750deg)}}
+@media(max-width:420px){body{padding:10px;align-items:flex-start}.app{padding:24px 18px 18px;border-radius:26px;min-height:calc(100svh - 20px);display:flex;flex-direction:column;justify-content:center}h1{font-size:27px}.lead{font-size:12px}.timer{width:min(78vw,270px);height:min(78vw,270px);margin:14px auto 6px}.mascot{height:80px}.mascot svg{height:80px;width:92px}.time{font-size:39px}.area{padding:9px 2px}.area .name{font-size:10px}.actions{margin-top:13px}}
+@media(prefers-reduced-motion:reduce){.bubble,.mascot,.reward,.speck{animation:none}}
+</style>
+</head>
+<body>
+<main class="app" id="app">
+  <div class="topline">✦ SIREN'S LITTLE DENTAL CLUB ✦</div>
+  <h1>猫猫的<em>刷牙星球</em> 🫧</h1>
+  <p class="lead">今天也来给小牙齿洗个泡泡澡 ♡</p>
+  <div class="mode" aria-label="选择刷牙时长"><button class="active" id="two" aria-pressed="true">2 分钟 · 日常</button><button id="three" aria-pressed="false">3 分钟 · 慢慢刷</button></div>
+  <div class="timer" role="timer" aria-live="off" aria-label="刷牙倒计时">
+    <div class="bubble b1"></div><div class="bubble b2"></div><div class="bubble b3"></div><div class="bubble b4"></div>
+    <svg class="ring" viewBox="0 0 280 280" aria-hidden="true"><circle class="track" cx="140" cy="140" r="120"/><circle class="progress" id="progress" cx="140" cy="140" r="120"/></svg>
+    <div class="center">
+      <div class="mascot" aria-label="脸颊粉粉的笑眯眯小牙齿">
+        <svg viewBox="0 0 120 108" role="img" aria-hidden="true">
+          <path d="M25 18 C4 29 14 55 21 75 C28 95 32 108 43 102 C53 97 52 77 60 78 C69 77 68 98 78 102 C90 107 93 88 99 71 C108 47 118 23 93 17 C80 12 68 20 60 20 C49 20 36 11 25 18Z" fill="#fff" stroke="#bfd9e4" stroke-width="3"/>
+          <ellipse cx="35" cy="56" rx="10" ry="6" fill="#facad0" opacity=".65"/><ellipse cx="86" cy="56" rx="10" ry="6" fill="#facad0" opacity=".65"/>
+          <path d="M42 49q6-7 12 0 M68 49q6-7 12 0" fill="none" stroke="#426279" stroke-width="3.6" stroke-linecap="round"/>
+          <path d="M54 62q7 8 14 0" stroke="#426279" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+          <path d="M100 16l3-9 3 9 9 3-9 3-3 9-3-9-9-3Z" fill="#dbaec5"/>
+          <circle cx="17" cy="14" r="3" fill="#9fcce0"/><circle cx="11" cy="28" r="2" fill="#aacbdc"/>
+        </svg>
+      </div>
+      <div class="time" id="time">02:00</div>
+      <div class="timer-sub" id="status">牙齿在等猫猫 ♡</div>
+    </div>
+  </div>
+  <div class="areas" id="areas" aria-label="四个刷牙区域">
+    <div class="area"><span class="symbol">🐚</span><span class="name">右上</span></div><div class="area"><span class="symbol">🫧</span><span class="name">左上</span></div><div class="area"><span class="symbol">🐠</span><span class="name">左下</span></div><div class="area"><span class="symbol">⭐</span><span class="name">右下</span></div>
+  </div>
+  <div class="message" aria-live="polite"><strong id="hint">刷牙队长，准备出发了吗？</strong><span id="subhint">每刷完一片海域，就会收到换区信号</span></div>
+  <div class="actions"><button class="primary" id="start">🪥 开始刷牙</button><button class="secondary" id="reset">↺ 重来</button></div>
+  <div class="bottom"><span>猫猫的小珍珠：<strong id="pearls">0</strong> 颗 🐚</span><button class="sound" id="sound" aria-pressed="true">🔔 声音开</button></div>
+  <div class="note">小提醒：手机保持页面打开，才能听见换区提示音。</div>
+  <div class="celebrate" id="celebrate" aria-live="assertive" aria-hidden="true"><div class="specks" id="specks" aria-hidden="true"></div><div class="reward">🐱🦷✨</div><h2>猫猫！全口闪闪发光！</h2><p>沈砚颁发今日小牙齿荣誉奖章。<br>奖励一颗珍珠，外加一个亲亲。啾 ♡</p><div class="badge" id="rewardBadge">✧ 珍珠 +1 ✧</div><button class="again" id="again">再刷一次 🪥</button></div>
+</main>
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+  const areaEls=[...document.querySelectorAll('.area')];
+  const stageNames=['右上','左上','左下','右下'];
+  const stageHints=['轻轻打圈，外侧和内侧都照顾到','慢慢移动，小牙齿一颗也别落下','后槽牙藏得深，记得去找它们','最后一片海域！咬合面也刷干净'];
+  const emojis=['🐚','🫧','🐠','⭐'];
+  const C=2*Math.PI*120;
+  let duration=120,remaining=duration,elapsed=0,running=false,finished=false,lastStage=-1,interval=null,startTime=0,audioCtx=null,muted=false,pearlCount=0;
+  try{pearlCount=Math.max(0,Number(localStorage.getItem('sirenBrushPearls')||0))||0}catch(e){}
+  $('pearls').textContent=pearlCount;
+  $('progress').style.strokeDasharray=C;
+  $('progress').style.strokeDashoffset=C;
+  function clock(sec){let s=Math.ceil(Math.max(0,sec));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+  function chirp(done=false){if(muted)return;try{let Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioCtx=audioCtx||new Audio();if(audioCtx.state==='suspended')audioCtx.resume();const now=audioCtx.currentTime;const notes=done?[523.25,659.25,783.99,1046.5]:[740,880];notes.forEach((f,i)=>{const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=f;gain.gain.setValueAtTime(.0001,now+i*.15);gain.gain.exponentialRampToValueAtTime(.075,now+i*.15+.015);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.15+.19);osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now+i*.15);osc.stop(now+i*.15+.2)})}catch(e){}}
+  function vibrate(){try{navigator.vibrate?.([60,35,60])}catch(e){}}
+  function paint(){remaining=Math.max(0,duration-elapsed);$('time').textContent=clock(remaining);const p=Math.min(1,elapsed/duration);$('progress').style.strokeDashoffset=(C*(1-p)).toFixed(2);let stage=Math.min(3,Math.floor(elapsed/(duration/4)));if(elapsed===0)stage=-1;areaEls.forEach((el,i)=>{el.className='area'+(i<stage?' done':i===stage?' active':'');el.querySelector('.symbol').textContent=i<stage?'✓':emojis[i]});if(stage!==lastStage){if(running&&stage>0&&stage>lastStage){chirp();vibrate()}lastStage=stage}
+    if(running){$('status').textContent='正在清洁 · '+stageNames[stage];$('hint').textContent='第 '+(stage+1)+'/4 区：'+stageNames[stage];$('subhint').textContent=stageHints[stage]+' ♡'}else if(finished){$('status').textContent='通关成功 ✨'}else if(elapsed>0){$('status').textContent='先休息一下 🫧';$('hint').textContent='小牙刷在等你回来';$('subhint').textContent='按继续刷牙，就从这里接着走'}else{$('status').textContent='牙齿在等猫猫 ♡';$('hint').textContent='刷牙队长，准备出发了吗？';$('subhint').textContent='每 '+duration/4+' 秒提醒换区，四片海域全部通关'}
+    $('start').textContent=finished?'✨ 已完成':running?'Ⅱ 暂停一下':elapsed>0?'▶ 继续刷牙':'🪥 开始刷牙';$('start').disabled=finished;
+  }
+  function tick(){if(!running)return;elapsed=Math.min(duration,(performance.now()-startTime)/1000);if(elapsed>=duration){finish();return}paint()}
+  function stopTimer(){running=false;clearInterval(interval);interval=null}
+  function finish(){stopTimer();elapsed=duration;finished=true;pearlCount++;$('pearls').textContent=pearlCount;try{localStorage.setItem('sirenBrushPearls',String(pearlCount))}catch(e){}paint();chirp(true);vibrate();$('rewardBadge').textContent='✧ 第 '+pearlCount+' 颗小珍珠入袋 ✧';$('specks').innerHTML='';const symbols=['✦','✧','♡','🫧','⋆','✿'];for(let i=0;i<24;i++){const sp=document.createElement('span');sp.className='speck';sp.textContent=symbols[i%symbols.length];sp.style.left=((i*41+17)%100)+'%';sp.style.animationDelay=(-((i*37)%29)/10)+'s';sp.style.animationDuration=(2+(i%5)*.34)+'s';sp.style.color=i%2?'#83acc3':'#d59cb3';$('specks').appendChild(sp)}$('celebrate').classList.add('show');$('celebrate').setAttribute('aria-hidden','false')}
+  function restart(){stopTimer();finished=false;elapsed=0;lastStage=-1;$('celebrate').classList.remove('show');$('celebrate').setAttribute('aria-hidden','true');paint()}
+  $('start').addEventListener('click',()=>{if(finished)return;if(running){tick();stopTimer();paint()}else{running=true;startTime=performance.now()-elapsed*1000;lastStage=Math.floor(elapsed/(duration/4));if(elapsed===0)lastStage=-1;interval=setInterval(tick,100);chirp();paint()}});
+  $('reset').addEventListener('click',restart);$('again').addEventListener('click',restart);
+  $('two').addEventListener('click',()=>changeMode(120));$('three').addEventListener('click',()=>changeMode(180));
+  function changeMode(s){duration=s;restart();$('two').classList.toggle('active',s===120);$('three').classList.toggle('active',s===180);$('two').setAttribute('aria-pressed',String(s===120));$('three').setAttribute('aria-pressed',String(s===180))}
+  $('sound').addEventListener('click',()=>{muted=!muted;$('sound').textContent=muted?'🔕 声音关':'🔔 声音开';$('sound').setAttribute('aria-pressed',String(!muted));if(!muted)chirp()});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&running)tick()});
+  paint();
+})();
+</script>
+</body>
+</html>
