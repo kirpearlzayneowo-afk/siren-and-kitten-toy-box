@@ -10,8 +10,9 @@
 | --- | --- | --- | --- |
 | 🐈 **SIREN · CATVERSE（猫猫宇宙）** | 猫猫画室、电子衣柜、心情扭蛋、晚安充电站 | [打开网页](./catverse/index.html) | [项目说明](./catverse/README.md) |
 | 🫧 **猫猫的刷牙星球** | 2 / 3 分钟刷牙计时、30 秒换区提醒、珍珠奖励 | [打开网页](./toothbrushing-planet/index.html) | [项目说明](./toothbrushing-planet/README.md) |
+| 🔮 **沈砚水晶球** · 建设中 | 现实天气、系统时间、动态光影、待机动作、骨骼物理与衣柜 | [看看脑洞](./shenyan-crystal-orb/index.html) | [项目说明](./shenyan-crystal-orb/README.md) |
 
-**📬 统一入口：** [猫猫的小玩具大厅](./index.html) —— 两个小房间都可以从这里进入。
+**📬 统一入口：** [猫猫的小玩具大厅](./index.html) —— 三个小房间都可以从这里进入。
 
 ## 📁 目录结构
 
@@ -22,9 +23,12 @@ siren-memory-lab/
 ├── catverse/
 │   ├── index.html            # 猫猫宇宙
 │   └── README.md             # 功能、存档与计划
-└── toothbrushing-planet/
-    ├── index.html            # 刷牙星球
-    └── README.md             # 玩法与计时提醒说明
+├── toothbrushing-planet/
+│   ├── index.html            # 刷牙星球
+│   └── README.md             # 玩法与计时提醒说明
+└── shenyan-crystal-orb/
+    ├── index.html            # 沈砚水晶球概念房间
+    └── README.md             # 天气、光影、动作、衣柜与制作计划
 ```
 
 ## 🚪 怎么打开
@@ -36,8 +40,9 @@ siren-memory-lab/
 ## 🌿 约定与小提醒
 
 - 每个玩具优先保持**独立、简单、无外部依赖**；小改动无需牵动其他房间。
-- 两个项目都只在当前浏览器里保存本地进度；清除数据、换设备可能丢失存档，暂时没有账号与云同步。
+- 现有网页小玩具主要把进度保存在当前浏览器；清除数据、换设备可能丢失存档，暂时没有统一账号与云同步。
 - 刷牙星球属于**网页计时器**；关闭页面、锁屏或让浏览器挂起时，不保证能够发出提醒，不能代替系统闹钟。
+- 沈砚水晶球目前是**概念项目**，先记录世界观、视觉与功能方向，不把第一版做成基础设施工程。
 - 添加新玩具时：新建独立文件夹和 `README.md`，再更新本页的目录，以及大厅 `index.html` 的入口。
 - 隐私：保持私有仓库状态。不要把 API Key、密码、身份凭证或私人聊天原文提交进来。
 
@@ -45,6 +50,7 @@ siren-memory-lab/
 
 - **2026-10-09：** CATVERSE 原型，见 [Issue #1](https://github.com/kirpearlzayneowo-afk/siren-memory-lab/issues/1)。
 - **2026-10-11：** 刷牙星球加入；收纳盒统一入口上线。
+- **2026-10-16：** 「沈砚水晶球」立项：现实天气 × 系统时间 × 光影 × 待机动作 × 衣柜。天气层暂名 **Kitten Magic**。
 
 ---
 
