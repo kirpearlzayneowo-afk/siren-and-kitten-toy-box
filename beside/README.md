@@ -49,4 +49,6 @@ codex mcp add beside -- <Python绝对路径> <本目录绝对路径>\mcp_server.
 
 项目记录：[Issue #28](https://github.com/kirpearlzayneowo-afk/siren-memory-lab/issues/28)；与 #13 的纯前端陪画番茄钟分开。本目录是 Windows 本地程序源码，不是静态网页：不能直接打开 panel.html 来使用，也没有部署成公开网站。
 
-当前 UI 小字仍为上一版技术提示；用户希望替换成哄画画的话，措辞尚未定稿。此上传快照先保留现状。
+主界面采用陪画文案；标题下有 12 句预写碎碎念，每 8 秒轮换，也可点击或按键换句。页面隐藏时暂停轮播，尊重系统减少动态偏好。文案轮播纯本地运行，不代表实时模型活动。
+
+轮播逻辑可用 Node.js 运行 `node test_banter.cjs` 验证自动切换、点击、回环和隐藏暂停；实际使用工具无需 Node.js。

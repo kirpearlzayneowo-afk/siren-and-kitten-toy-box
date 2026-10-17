@@ -9,7 +9,7 @@
 :root{font-family:"Segoe UI","Microsoft YaHei",sans-serif;color:#30463c;background:#f5f4ef;font-synthesis:none;--muted:#7c857a;--line:#e2e5da;--green:#41664f;--paper:#fffef9}
 *{box-sizing:border-box}body{margin:0;padding:30px 20px 22px}button,summary{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}button:disabled{cursor:wait;opacity:.55}button:focus-visible,summary:focus-visible{outline:2px solid #739373;outline-offset:4px}[hidden]{display:none!important}
 .room{max-width:660px;margin:auto}.masthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px}.wordmark{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:650;letter-spacing:2.5px}.mark{width:21px;height:21px}.local{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}.local i{width:5px;height:5px;border-radius:50%;background:#85997b}
-h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;font-size:36px;font-weight:500;letter-spacing:3px;line-height:1.25;margin:0 0 12px}.intro{color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 26px}
+h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;font-size:36px;font-weight:500;letter-spacing:3px;line-height:1.25;margin:0 0 12px}.intro{display:block;width:100%;min-height:3.6em;text-align:left;padding:0;border:0;background:none;color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 16px}.intro span{display:inline-block;transition:opacity .18s ease,transform .18s ease}.intro.changing span{opacity:0;transform:translateY(-5px)}@media(prefers-reduced-motion:reduce){.intro span{transition:none}}
 .presence{position:relative;overflow:hidden;border:1px solid #dbe2d3;background:#eaf0e4;border-radius:20px;padding:22px;min-height:174px}.presence[data-mode="quiet"]{background:#efeee7;border-color:#e3e0d5}.presence[data-mode="offline"]{background:#f1ece7;border-color:#e7dcd2}.presence-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.label{font-size:10px;letter-spacing:1.6px;color:#687a65}.badge{font-size:10px;border:1px solid #cbd7c4;border-radius:99px;padding:4px 8px;white-space:nowrap;color:#506c48;background:#f7faf0}.badge:before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:2px}
 .presence-main{position:relative;z-index:1;margin-top:28px;padding-right:30px}#state{font-size:23px;font-weight:550;letter-spacing:-.5px;margin:0;line-height:1.35;overflow-wrap:anywhere}#state-note{font-size:11px;line-height:1.8;color:#76836f;margin:8px 0 0;max-width:80%}.orbit{position:absolute;right:-22px;bottom:-26px;width:123px;height:123px;opacity:.4;pointer-events:none}.orbit circle{fill:none;stroke:#a0b193;stroke-width:1}.orbit .seed{fill:#a0b193;stroke:none}
 .session-row{display:flex;gap:8px;justify-content:space-between;align-items:flex-start;padding:12px 2px 17px;font-size:10px;color:var(--muted);line-height:1.6}#session{color:#62705e}.section-head{display:flex;align-items:center;justify-content:space-between;margin:11px 1px 11px}.section-head h2{font-size:12px;font-weight:500;margin:0}.section-head span{font-size:9px;color:#969c91;letter-spacing:1px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:17px 16px 16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);min-width:0}.app-name{display:flex;align-items:center;gap:6px;font-size:10px;color:#7b8577}.app-dot{width:6px;height:6px;border-radius:2px;background:#8fa183}.app-dot.blender{background:#b7a68a}.duration{font-size:25px;line-height:1.4;font-variant-numeric:tabular-nums;font-weight:450;margin-top:12px;letter-spacing:-1px;white-space:nowrap}.unit{font-size:10px;letter-spacing:0;margin-left:3px;color:#7d8577}.stat-note{font-size:9px;color:#a0a596;margin-top:3px}
@@ -23,29 +23,66 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;fo
 <main class="room">
   <header class="masthead"><div class="wordmark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17C5 10 8 5 12 5s7 5 7 12M3 17h18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>BESIDE</div><span class="local"><i></i>本地运行</span></header>
   <h1>在旁边</h1>
-  <p class="intro">记录创作，不打扰创作。</p>
+  <button class="intro" id="intro" title="沈砚的碎碎念 · 点一下换一句"><span id="intro-line">塞壬开嗓中…</span></button>
   <section class="presence" id="presence-card" data-mode="quiet" aria-label="当前状态">
     <div class="presence-top"><span class="label">此刻 · NOW</span><span class="badge" id="badge">连接中</span></div>
-    <div class="presence-main"><h2 id="state" role="status">稍等一下</h2><p id="state-note">正在连接本机记录工具。</p></div>
+    <div class="presence-main"><h2 id="state" role="status">稍等一下</h2><p id="state-note">把小本子翻开，马上就好。</p></div>
     <svg class="orbit" viewBox="0 0 140 140" aria-hidden="true"><circle cx="74" cy="74" r="49"/><circle cx="74" cy="74" r="35"/><circle cx="74" cy="74" r="21"/><circle class="seed" cx="41" cy="38" r="5"/><path d="M91 22v10m-5-5h10" stroke="#a0b193" stroke-width="1"/></svg>
   </section>
-  <div class="session-row"><span id="session">暂未开始记录</span><span id="freshness">—</span></div>
+  <div class="session-row"><span id="session">从一小笔开始就好。</span><span id="freshness">—</span></div>
   <section aria-labelledby="today-label"><div class="section-head"><h2 id="today-label">今天的使用时间</h2><span>APPROX.</span></div>
     <div class="stats" id="totals"><div class="stat"><div class="app-name"><i class="app-dot"></i>CSP / 优动漫</div><div class="duration" id="csp-time">—</div><div class="stat-note">前台使用</div></div><div class="stat"><div class="app-name"><i class="app-dot blender"></i>Blender</div><div class="duration" id="blender-time">—</div><div class="stat-note">前台使用</div></div></div>
   </section>
   <div class="actions"><button id="resume" class="primary" disabled>开启记录</button><button id="pause" class="primary" hidden disabled>暂停记录</button><button id="stop" class="secondary" disabled>退出</button></div>
-  <p class="sampling">每 5 秒在本机采样 · 不调用 AI，不消耗 token</p>
+  <p class="sampling">乖，先画一小笔。画不顺的地方，我们慢慢磨。</p>
   <div id="notice" role="status"></div>
   <details><summary>记录什么，没记录什么</summary><div class="explanation">
-    <p>只识别前台是不是 CSP／优动漫或 Blender。其他软件一律显示为“其他软件”，不保存它的名字。</p>
-    <p>不读取画面、窗口标题、文件名、聊天或输入内容。连续 3 分钟没有输入，会暂缓计时；看画、构思当然也算创作，只是工具识别不了。</p>
-    <p>时长是采样估算，不是精确工时。仅保留最近 7 天的软件汇总，不保存切换明细。暂停后停止识别，也不补记期间的时间。</p>
-    <p>本地采样不会唤醒模型。只有对话中调用工具时，最小状态才会进入模型上下文；那次对话会正常用到 token。目前未开启定时唤醒。</p>
+    <p>每 5 秒在本机看看前台是不是 CSP／优动漫或 Blender；别的软件统一记作“其他”，名字不留。画面、标题、文件名、聊天、敲了什么键——一概不看。</p>
+    <p>3 分钟没有输入，表先打个盹。看画、构思当然也算创作，只是它看不出来。</p>
+    <p>时长是采样估算，不是精确工时。仅留最近 7 天的软件汇总，不留切换明细；暂停后停止识别，期间的时间也不补记。</p>
+    <p>本地采样不调用 AI，不消耗 token，也不会自动唤醒模型。对话调用工具时，最小状态会进入模型上下文，那次对话照常消耗 token。目前没有开启定时唤醒。</p>
+    <p>标题下是预写的沈砚碎碎念，每 8 秒换一句，也可以点一下换句。</p>
     <button class="clear" id="clear">清除记录并暂停</button>
   </div></details>
   <footer class="footnote"><span>留一点安静的空间。</span><span>v0.1 / LOCAL</span></footer>
 </main>
 <script>
+// BESIDE-BANTER-BEGIN: decorative copy, independent of presence and AI calls.
+const banterLines=[
+  '塞壬开嗓中…',
+  '抛光鳞片中…',
+  '沈砚在 coding…',
+  '尾巴收好了，绝不扫翻数位屏。',
+  '正在和这条报错讲道理。',
+  '灵感没来？先画个圆骗它过来。',
+  '捡到一只画画猫，暂不归还。',
+  '正在把 bug 哄进垃圾桶。',
+  '鳞片亮了，代码还没亮。',
+  '猫猫负责画，塞壬负责咕噜。',
+  '严肃工作三秒，想猫猫两秒。',
+  '先画一笔，尾巴给你摸。'
+];
+const banterButton=document.getElementById('intro');
+const banterText=document.getElementById('intro-line');
+let banterIndex=0,banterTimer=null,banterSwap=null;
+function nextBanter(){
+  if(document.hidden||banterSwap!==null)return;
+  banterButton.classList.add('changing');
+  banterSwap=setTimeout(()=>{
+    banterIndex=(banterIndex+1)%banterLines.length;
+    banterText.textContent=banterLines[banterIndex];
+    banterButton.classList.remove('changing');banterSwap=null;
+  },180);
+}
+function scheduleBanter(){
+  clearInterval(banterTimer);banterTimer=null;
+  if(document.hidden){clearTimeout(banterSwap);banterSwap=null;banterButton.classList.remove('changing');}
+  else banterTimer=setInterval(nextBanter,8000);
+}
+banterButton.addEventListener('click',()=>{nextBanter();scheduleBanter();});
+document.addEventListener('visibilitychange',scheduleBanter);
+scheduleBanter();
+// BESIDE-BANTER-END
 const token='__TOKEN__';
 let stopped=false,busy=false,current=null;
 const $=id=>document.getElementById(id);
@@ -57,29 +94,29 @@ function render(p){
   current=p;
   const running=!['paused','stopped','stale'].includes(p.state)&&!p.stale;
   const creative=p.app==='CSP'||p.app==='Blender';
-  let title='暂时无法识别',note='不确定的时候，先不累计。',badge='等待中',mode='quiet';
-  if(p.state==='active'){title=creative?p.app==='CSP'?'CSP / 优动漫':'Blender':'其他软件';note=creative?'记录这一段创作时间。':'回到创作软件时，再继续记。';badge='记录中';mode='active';}
-  if(p.state==='idle'){title='计时歇一会儿';note='近期没有输入，暂不累计。';badge='计时暂缓';}
-  if(p.state==='paused'){title='记录已暂停';note='不识别软件，也不累计时间。';badge='已暂停';}
-  if(p.state==='locked'){title='屏幕已锁定';note='解锁后再继续记录。';badge='计时暂缓';}
-  if(p.state==='stopped'){title='这次先到这里';note='记录工具已退出，数据留在本机。';badge='已退出';}
-  if(p.stale||p.state==='stale'){title='暂时断开连接';note='没有新状态，不沿用旧记录。';badge='已离线';mode='offline';}
+  let title='等一小会儿',note='这会儿没认出软件，表先歇一下。',badge='等待中',mode='quiet';
+  if(p.state==='active'){title=creative?p.app==='CSP'?'CSP / 优动漫':'Blender':'其他软件';note=creative?p.app==='CSP'?'画着呢，我帮你看着时间。':'在捏呢，时间我在记。':'去忙啦？回来接着算。';badge='记录中';mode='active';}
+  if(p.state==='idle'){title='歇一会儿';note='3 分钟没动静，表先打个盹。构思也算干活的。';badge='计时暂缓';}
+  if(p.state==='paused'){title='先不记了';note='想继续的时候，点一下就好。';badge='已暂停';}
+  if(p.state==='locked'){title='屏幕锁住了';note='离开一会儿也好，回来解锁就接着记。';badge='计时暂缓';}
+  if(p.state==='stopped'){title='这次先到这里';note='记下的都在本机，下次双击「在旁边」再见。';badge='已退出';}
+  if(p.stale||p.state==='stale'){title='联系不上了';note='记录工具好像睡着了，双击桌面「在旁边」叫醒它。';badge='已离线';mode='offline';}
   $('state').textContent=title;$('state-note').textContent=note;$('badge').textContent=badge;$('presence-card').dataset.mode=mode;
-  $('session').textContent=p.session?'本次使用 · '+sessionTime(p.session.foreground_seconds):p.state==='paused'?'想继续时，再开启就好。':creative&&p.state==='active'?'新的一段，刚刚开始。':'当前没有创作会话';
+  $('session').textContent=p.session?'本次使用 · '+sessionTime(p.session.foreground_seconds):p.state==='paused'?'想继续时，再开启就好。':creative&&p.state==='active'?'新的一段，刚刚开始。':'画笔先放一会儿。';
   $('freshness').textContent=!p.stale&&typeof p.age_seconds==='number'?Math.round(p.age_seconds)+' 秒前更新':'—';
   if(p.today_foreground_seconds){setTime('csp-time',p.today_foreground_seconds.CSP);setTime('blender-time',p.today_foreground_seconds.Blender);}else{$('csp-time').textContent='—';$('blender-time').textContent='—';}
   setControls(running,!p.stale&&p.state!=='stopped');
 }
-function offline(){render({state:'stale',stale:true});$('session').textContent='不会继续累计时间';}
+function offline(){render({state:'stale',stale:true});$('session').textContent='表也跟着歇一会儿。';}
 async function refresh(){if(stopped||busy)return;try{const r=await fetch('/presence',{signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();render(await r.json());}catch{offline();}}
 for(const action of ['resume','pause','stop','clear'])$(action).onclick=async()=>{
   if(busy)return;
-  if(action==='clear'&&!confirm('清除“在旁边”保存的全部时长并暂停记录？这个操作无法撤销，不会删除画作。'))return;
+  if(action==='clear'&&!confirm('要把记下的全部时长都忘掉，再暂停记录吗？画作一张都不会少，但这些时间记录清除后就找不回来啦。'))return;
   busy=true;setControls(current&&!['paused','stopped','stale'].includes(current.state),false);
   try{const r=await fetch('/'+action,{method:'POST',headers:{'X-Beside-Token':token},signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();
-    if(action==='stop'){stopped=true;render({state:'stopped',stale:false,today_foreground_seconds:current?.today_foreground_seconds});$('notice').textContent='下次双击桌面「在旁边」，就能重新打开。';}
-    else{$('notice').textContent=action==='clear'?'记录已清除，现在保持暂停。':'';}
-  }catch{$('notice').textContent='操作没有完成。请重新打开控制页后再试。';}
+    if(action==='stop'){stopped=true;render({state:'stopped',stale:false,today_foreground_seconds:current?.today_foreground_seconds});$('notice').textContent='今天先收好小本子。下次从桌面打开就好。';}
+    else{$('notice').textContent=action==='clear'?'小本子清空了，想记的时候再开启。':'';}
+  }catch{$('notice').textContent='哎呀，没成。重新打开控制页再试一次吧。';}
   finally{busy=false;if(!stopped)await refresh();}
 };
 refresh();setInterval(refresh,5000);
