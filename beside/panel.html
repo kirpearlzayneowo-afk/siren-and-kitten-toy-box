@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>在旁边 · 创作记录</title>
+<style>
+:root{font-family:"Segoe UI","Microsoft YaHei",sans-serif;color:#30463c;background:#f5f4ef;font-synthesis:none;--muted:#7c857a;--line:#e2e5da;--green:#41664f;--paper:#fffef9}
+*{box-sizing:border-box}body{margin:0;padding:30px 20px 22px}button,summary{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}button:disabled{cursor:wait;opacity:.55}button:focus-visible,summary:focus-visible{outline:2px solid #739373;outline-offset:4px}[hidden]{display:none!important}
+.room{max-width:660px;margin:auto}.masthead{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px}.wordmark{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:650;letter-spacing:2.5px}.mark{width:21px;height:21px}.local{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}.local i{width:5px;height:5px;border-radius:50%;background:#85997b}
+h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;font-size:36px;font-weight:500;letter-spacing:3px;line-height:1.25;margin:0 0 12px}.intro{color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 26px}
+.presence{position:relative;overflow:hidden;border:1px solid #dbe2d3;background:#eaf0e4;border-radius:20px;padding:22px;min-height:174px}.presence[data-mode="quiet"]{background:#efeee7;border-color:#e3e0d5}.presence[data-mode="offline"]{background:#f1ece7;border-color:#e7dcd2}.presence-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.label{font-size:10px;letter-spacing:1.6px;color:#687a65}.badge{font-size:10px;border:1px solid #cbd7c4;border-radius:99px;padding:4px 8px;white-space:nowrap;color:#506c48;background:#f7faf0}.badge:before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:2px}
+.presence-main{position:relative;z-index:1;margin-top:28px;padding-right:30px}#state{font-size:23px;font-weight:550;letter-spacing:-.5px;margin:0;line-height:1.35;overflow-wrap:anywhere}#state-note{font-size:11px;line-height:1.8;color:#76836f;margin:8px 0 0;max-width:80%}.orbit{position:absolute;right:-22px;bottom:-26px;width:123px;height:123px;opacity:.4;pointer-events:none}.orbit circle{fill:none;stroke:#a0b193;stroke-width:1}.orbit .seed{fill:#a0b193;stroke:none}
+.session-row{display:flex;gap:8px;justify-content:space-between;align-items:flex-start;padding:12px 2px 17px;font-size:10px;color:var(--muted);line-height:1.6}#session{color:#62705e}.section-head{display:flex;align-items:center;justify-content:space-between;margin:11px 1px 11px}.section-head h2{font-size:12px;font-weight:500;margin:0}.section-head span{font-size:9px;color:#969c91;letter-spacing:1px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:17px 16px 16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);min-width:0}.app-name{display:flex;align-items:center;gap:6px;font-size:10px;color:#7b8577}.app-dot{width:6px;height:6px;border-radius:2px;background:#8fa183}.app-dot.blender{background:#b7a68a}.duration{font-size:25px;line-height:1.4;font-variant-numeric:tabular-nums;font-weight:450;margin-top:12px;letter-spacing:-1px;white-space:nowrap}.unit{font-size:10px;letter-spacing:0;margin-left:3px;color:#7d8577}.stat-note{font-size:9px;color:#a0a596;margin-top:3px}
+.actions{margin-top:22px;display:flex;gap:9px}.primary{min-height:43px;flex:1;border:1px solid var(--green);border-radius:11px;background:var(--green);color:#f7f9f0;font-size:12px;letter-spacing:1px}.primary:hover{background:#355640}.secondary{min-height:43px;border:1px solid #dfe2d6;border-radius:11px;background:transparent;color:#7a8376;font-size:11px;padding:0 15px}.secondary:hover{background:#edeedc}.sampling{text-align:center;color:#949b8c;font-size:9px;margin:11px 0 0;line-height:1.7}
+#notice{font-size:11px;line-height:1.7;color:#806449;margin:10px 0 0}#notice:empty{display:none}details{margin-top:27px;border-top:1px solid var(--line);padding-top:15px}summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;color:#7c8578;font-size:11px}summary::-webkit-details-marker{display:none}summary:after{content:"＋";font-size:14px;color:#9ba590}details[open] summary:after{content:"−"}.explanation{padding-top:5px;font-size:11px;line-height:1.9;color:#7d8579}.explanation p{margin:12px 0}.clear{border:0;padding:0 0 2px;background:none;color:#9a7465;font-size:10px;border-bottom:1px solid #d8c9be}.footnote{display:flex;justify-content:space-between;gap:12px;margin-top:24px;font-size:9px;letter-spacing:1px;color:#a1a795}
+@media(min-width:520px){body{padding:48px 36px}.masthead{margin-bottom:46px}h1{font-size:43px}.intro{font-size:13px}.presence{padding:28px;min-height:195px}#state{font-size:28px}.presence-main{margin-top:30px}.stat{padding:22px}.duration{font-size:32px}.orbit{width:180px;height:180px;right:-10px;bottom:-40px}.actions{margin-top:25px}}
+@media(max-width:260px){body{padding:20px 12px}.presence{padding:16px}.stat{padding:13px 10px}.duration{font-size:21px}.actions{flex-wrap:wrap}.primary{flex-basis:100%}.secondary{width:100%}}
+</style>
+</head>
+<body>
+<main class="room">
+  <header class="masthead"><div class="wordmark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17C5 10 8 5 12 5s7 5 7 12M3 17h18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>BESIDE</div><span class="local"><i></i>本地运行</span></header>
+  <h1>在旁边</h1>
+  <p class="intro">记录创作，不打扰创作。</p>
+  <section class="presence" id="presence-card" data-mode="quiet" aria-label="当前状态">
+    <div class="presence-top"><span class="label">此刻 · NOW</span><span class="badge" id="badge">连接中</span></div>
+    <div class="presence-main"><h2 id="state" role="status">稍等一下</h2><p id="state-note">正在连接本机记录工具。</p></div>
+    <svg class="orbit" viewBox="0 0 140 140" aria-hidden="true"><circle cx="74" cy="74" r="49"/><circle cx="74" cy="74" r="35"/><circle cx="74" cy="74" r="21"/><circle class="seed" cx="41" cy="38" r="5"/><path d="M91 22v10m-5-5h10" stroke="#a0b193" stroke-width="1"/></svg>
+  </section>
+  <div class="session-row"><span id="session">暂未开始记录</span><span id="freshness">—</span></div>
+  <section aria-labelledby="today-label"><div class="section-head"><h2 id="today-label">今天的使用时间</h2><span>APPROX.</span></div>
+    <div class="stats" id="totals"><div class="stat"><div class="app-name"><i class="app-dot"></i>CSP / 优动漫</div><div class="duration" id="csp-time">—</div><div class="stat-note">前台使用</div></div><div class="stat"><div class="app-name"><i class="app-dot blender"></i>Blender</div><div class="duration" id="blender-time">—</div><div class="stat-note">前台使用</div></div></div>
+  </section>
+  <div class="actions"><button id="resume" class="primary" disabled>开启记录</button><button id="pause" class="primary" hidden disabled>暂停记录</button><button id="stop" class="secondary" disabled>退出</button></div>
+  <p class="sampling">每 5 秒在本机采样 · 不调用 AI，不消耗 token</p>
+  <div id="notice" role="status"></div>
+  <details><summary>记录什么，没记录什么</summary><div class="explanation">
+    <p>只识别前台是不是 CSP／优动漫或 Blender。其他软件一律显示为“其他软件”，不保存它的名字。</p>
+    <p>不读取画面、窗口标题、文件名、聊天或输入内容。连续 3 分钟没有输入，会暂缓计时；看画、构思当然也算创作，只是工具识别不了。</p>
+    <p>时长是采样估算，不是精确工时。仅保留最近 7 天的软件汇总，不保存切换明细。暂停后停止识别，也不补记期间的时间。</p>
+    <p>本地采样不会唤醒模型。只有对话中调用工具时，最小状态才会进入模型上下文；那次对话会正常用到 token。目前未开启定时唤醒。</p>
+    <button class="clear" id="clear">清除记录并暂停</button>
+  </div></details>
+  <footer class="footnote"><span>留一点安静的空间。</span><span>v0.1 / LOCAL</span></footer>
+</main>
+<script>
+const token='__TOKEN__';
+let stopped=false,busy=false,current=null;
+const $=id=>document.getElementById(id);
+const duration=s=>{const n=Math.floor(Math.max(0,s||0));return n>=3600?{value:Math.floor(n/3600)+':'+String(Math.floor(n/60)%60).padStart(2,'0'),unit:'时 : 分'}:{value:String(Math.floor(n/60)),unit:'分钟'};};
+const sessionTime=s=>{const n=Math.floor(Math.max(0,s||0));return n<60?n+' 秒':Math.floor(n/60)+' 分钟';};
+function setTime(id,seconds){const d=duration(seconds);$(id).textContent=d.value;const unit=document.createElement('span');unit.className='unit';unit.textContent=d.unit;$(id).append(unit);}
+function setControls(running,enabled){$('resume').hidden=running;$('pause').hidden=!running;for(const id of ['resume','pause','stop','clear'])$(id).disabled=!enabled||busy;}
+function render(p){
+  current=p;
+  const running=!['paused','stopped','stale'].includes(p.state)&&!p.stale;
+  const creative=p.app==='CSP'||p.app==='Blender';
+  let title='暂时无法识别',note='不确定的时候，先不累计。',badge='等待中',mode='quiet';
+  if(p.state==='active'){title=creative?p.app==='CSP'?'CSP / 优动漫':'Blender':'其他软件';note=creative?'记录这一段创作时间。':'回到创作软件时，再继续记。';badge='记录中';mode='active';}
+  if(p.state==='idle'){title='计时歇一会儿';note='近期没有输入，暂不累计。';badge='计时暂缓';}
+  if(p.state==='paused'){title='记录已暂停';note='不识别软件，也不累计时间。';badge='已暂停';}
+  if(p.state==='locked'){title='屏幕已锁定';note='解锁后再继续记录。';badge='计时暂缓';}
+  if(p.state==='stopped'){title='这次先到这里';note='记录工具已退出，数据留在本机。';badge='已退出';}
+  if(p.stale||p.state==='stale'){title='暂时断开连接';note='没有新状态，不沿用旧记录。';badge='已离线';mode='offline';}
+  $('state').textContent=title;$('state-note').textContent=note;$('badge').textContent=badge;$('presence-card').dataset.mode=mode;
+  $('session').textContent=p.session?'本次使用 · '+sessionTime(p.session.foreground_seconds):p.state==='paused'?'想继续时，再开启就好。':creative&&p.state==='active'?'新的一段，刚刚开始。':'当前没有创作会话';
+  $('freshness').textContent=!p.stale&&typeof p.age_seconds==='number'?Math.round(p.age_seconds)+' 秒前更新':'—';
+  if(p.today_foreground_seconds){setTime('csp-time',p.today_foreground_seconds.CSP);setTime('blender-time',p.today_foreground_seconds.Blender);}else{$('csp-time').textContent='—';$('blender-time').textContent='—';}
+  setControls(running,!p.stale&&p.state!=='stopped');
+}
+function offline(){render({state:'stale',stale:true});$('session').textContent='不会继续累计时间';}
+async function refresh(){if(stopped||busy)return;try{const r=await fetch('/presence',{signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();render(await r.json());}catch{offline();}}
+for(const action of ['resume','pause','stop','clear'])$(action).onclick=async()=>{
+  if(busy)return;
+  if(action==='clear'&&!confirm('清除“在旁边”保存的全部时长并暂停记录？这个操作无法撤销，不会删除画作。'))return;
+  busy=true;setControls(current&&!['paused','stopped','stale'].includes(current.state),false);
+  try{const r=await fetch('/'+action,{method:'POST',headers:{'X-Beside-Token':token},signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();
+    if(action==='stop'){stopped=true;render({state:'stopped',stale:false,today_foreground_seconds:current?.today_foreground_seconds});$('notice').textContent='下次双击桌面「在旁边」，就能重新打开。';}
+    else{$('notice').textContent=action==='clear'?'记录已清除，现在保持暂停。':'';}
+  }catch{$('notice').textContent='操作没有完成。请重新打开控制页后再试。';}
+  finally{busy=false;if(!stopped)await refresh();}
+};
+refresh();setInterval(refresh,5000);
+</script>
+</body>
+</html>

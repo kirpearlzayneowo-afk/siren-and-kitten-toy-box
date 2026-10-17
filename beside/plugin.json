@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "beside",
+  "version": "0.1.0",
+  "description": "Local read-only CSP and Blender presence metadata. No artwork, window titles, or input content.",
+  "extensions": {
+    "com.openai.interface": {
+      "displayName": "在旁边",
+      "shortDescription": "本地陪画状态与暂停开关"
+    }
+  }
+}

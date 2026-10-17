@@ -16,6 +16,10 @@
 
 ## 📁 目录结构
 
+### Windows 本地工具
+
+- **[在旁边 · beside](./beside/README.md)**：CSP／优动漫与 Blender 的本地前台状态记录、暂停开关与只读 MCP。源码已单独放在 `beside/`；它需要在 Windows 上启动本地程序，不是大厅里的静态网页，也不会自动唤起模型。详见 [Issue #28](https://github.com/kirpearlzayneowo-afk/siren-memory-lab/issues/28)。
+
 ```text
 siren-memory-lab/
 ├── README.md                 # 这张总目录
