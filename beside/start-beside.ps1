@@ -13,9 +13,33 @@ if ($besideListener) {
         throw 'Port 3212 belongs to another service. Nothing was changed.'
     }
 } else {
-    if (-not (Test-Path -LiteralPath $besidePython)) { throw 'Bundled Python runtime was not found.' }
+    if (-not (Test-Path -LiteralPath $besidePython)) {
+        # Public installs may not have Codex's bundled Python. Try a normal
+        # Python 3.10+ installation without touching PATH or installing anything.
+        $probe = 'import sys; print("beside-ready" if sys.version_info >= (3, 10) else "unsupported")'
+        $found = $false
+        foreach ($candidate in @('py.exe', 'python.exe')) {
+            $command = Get-Command $candidate -ErrorAction SilentlyContinue
+            if (-not $command) { continue }
+            try {
+                if ($candidate -eq 'py.exe') {
+                    $reply = & $command.Source -3 -c $probe 2>$null
+                } else {
+                    $reply = & $command.Source -c $probe 2>$null
+                }
+                if ($LASTEXITCODE -ne 0 -or $reply -ne 'beside-ready') { continue }
+                $besidePython = $command.Source
+                $besidePythonPrefix = if ($candidate -eq 'py.exe') { '-3 ' } else { '' }
+                $found = $true
+                break
+            } catch { }
+        }
+        if (-not $found) {
+            throw 'Python 3.10 or newer was not found. Install Python 3, then double-click start.cmd again.'
+        }
+    }
     New-Item -ItemType Directory -Path $besideData -Force | Out-Null
-    $besideProcess = Start-Process -FilePath $besidePython -ArgumentList ('"' + $besideScript + '"') -WorkingDirectory $besideRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $besideData 'stdout.log') -RedirectStandardError (Join-Path $besideData 'stderr.log') -PassThru
+    $besideProcess = Start-Process -FilePath $besidePython -ArgumentList ($besidePythonPrefix + '"' + $besideScript + '"') -WorkingDirectory $besideRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $besideData 'stdout.log') -RedirectStandardError (Join-Path $besideData 'stderr.log') -PassThru
     $besideReady = $false
     for ($besideAttempt = 0; $besideAttempt -lt 20; $besideAttempt++) {
         Start-Sleep -Milliseconds 250
