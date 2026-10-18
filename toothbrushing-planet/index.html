@@ -69,8 +69,8 @@ h1{margin:9px 0 4px;font-size:30px;font-weight:850;letter-spacing:1.2px;line-hei
   <div class="message" aria-live="polite"><strong id="hint">刷牙队长，准备出发了吗？</strong><span id="subhint">每刷完一片海域，就会收到换区信号</span></div>
   <div class="actions"><button class="primary" id="start">🪥 开始刷牙</button><button class="secondary" id="reset">↺ 重来</button></div>
   <div class="bottom"><span>猫猫的小珍珠：<strong id="pearls">0</strong> 颗 🐚</span><button class="sound" id="sound" aria-pressed="true">🔔 声音开</button></div>
-  <div class="note">小提醒：手机保持页面打开，才能听见换区提示音。</div>
-  <div class="celebrate" id="celebrate" aria-live="assertive" aria-hidden="true"><div class="specks" id="specks" aria-hidden="true"></div><div class="reward">🐱🦷✨</div><h2>猫猫！全口闪闪发光！</h2><p>沈砚颁发今日小牙齿荣誉奖章。<br>奖励一颗珍珠，外加一个亲亲。啾 ♡</p><div class="badge" id="rewardBadge">✧ 珍珠 +1 ✧</div><button class="again" id="again">再刷一次 🪥</button></div>
+  <div class="note">让页面亮着，换区时小牙齿会叫你。<br><a href="../index.html">← 回玩具箱</a></div>
+  <div class="celebrate" id="celebrate" aria-live="assertive" aria-hidden="true"><div class="specks" id="specks" aria-hidden="true"></div><div class="reward">🐱🦷✨</div><h2>猫猫！全口闪闪发光！</h2><p>沈砚颁发今日小牙齿荣誉奖章。<br>奖励一颗珍珠，外加一个亲亲。啾 ♡</p><div class="badge" id="rewardBadge">✧ 珍珠 +1 ✧</div><button class="again" id="again">收好珍珠 ♡</button></div>
 </main>
 <script>
 (function(){
@@ -81,23 +81,23 @@ h1{margin:9px 0 4px;font-size:30px;font-weight:850;letter-spacing:1.2px;line-hei
   const emojis=['🐚','🫧','🐠','⭐'];
   const C=2*Math.PI*120;
   let duration=120,remaining=duration,elapsed=0,running=false,finished=false,lastStage=-1,interval=null,startTime=0,audioCtx=null,muted=false,pearlCount=0;
-  try{pearlCount=Math.max(0,Number(localStorage.getItem('sirenBrushPearls')||0))||0}catch(e){}
+  try{const saved=Number(localStorage.getItem('sirenBrushPearls'));pearlCount=Number.isSafeInteger(saved)&&saved>=0?saved:0}catch(e){}
   $('pearls').textContent=pearlCount;
   $('progress').style.strokeDasharray=C;
   $('progress').style.strokeDashoffset=C;
   function clock(sec){let s=Math.ceil(Math.max(0,sec));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
   function chirp(done=false){if(muted)return;try{let Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioCtx=audioCtx||new Audio();if(audioCtx.state==='suspended')audioCtx.resume();const now=audioCtx.currentTime;const notes=done?[523.25,659.25,783.99,1046.5]:[740,880];notes.forEach((f,i)=>{const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=f;gain.gain.setValueAtTime(.0001,now+i*.15);gain.gain.exponentialRampToValueAtTime(.075,now+i*.15+.015);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.15+.19);osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now+i*.15);osc.stop(now+i*.15+.2)})}catch(e){}}
   function vibrate(){try{navigator.vibrate?.([60,35,60])}catch(e){}}
-  function paint(){remaining=Math.max(0,duration-elapsed);$('time').textContent=clock(remaining);const p=Math.min(1,elapsed/duration);$('progress').style.strokeDashoffset=(C*(1-p)).toFixed(2);let stage=Math.min(3,Math.floor(elapsed/(duration/4)));if(elapsed===0)stage=-1;areaEls.forEach((el,i)=>{el.className='area'+(i<stage?' done':i===stage?' active':'');el.querySelector('.symbol').textContent=i<stage?'✓':emojis[i]});if(stage!==lastStage){if(running&&stage>0&&stage>lastStage){chirp();vibrate()}lastStage=stage}
+  function paint(){remaining=Math.max(0,duration-elapsed);$('time').textContent=clock(remaining);const p=Math.min(1,elapsed/duration);$('progress').style.strokeDashoffset=(C*(1-p)).toFixed(2);let stage=Math.min(3,Math.floor(elapsed/(duration/4)));if(elapsed===0&&!running)stage=-1;areaEls.forEach((el,i)=>{el.className='area'+(finished||i<stage?' done':i===stage?' active':'');el.querySelector('.symbol').textContent=finished||i<stage?'✓':emojis[i]});if(stage!==lastStage){if(running&&stage>0&&stage>lastStage){chirp();vibrate()}lastStage=stage}
     if(running){$('status').textContent='正在清洁 · '+stageNames[stage];$('hint').textContent='第 '+(stage+1)+'/4 区：'+stageNames[stage];$('subhint').textContent=stageHints[stage]+' ♡'}else if(finished){$('status').textContent='通关成功 ✨'}else if(elapsed>0){$('status').textContent='先休息一下 🫧';$('hint').textContent='小牙刷在等你回来';$('subhint').textContent='按继续刷牙，就从这里接着走'}else{$('status').textContent='牙齿在等猫猫 ♡';$('hint').textContent='刷牙队长，准备出发了吗？';$('subhint').textContent='每 '+duration/4+' 秒提醒换区，四片海域全部通关'}
     $('start').textContent=finished?'✨ 已完成':running?'Ⅱ 暂停一下':elapsed>0?'▶ 继续刷牙':'🪥 开始刷牙';$('start').disabled=finished;
   }
   function tick(){if(!running)return;elapsed=Math.min(duration,(performance.now()-startTime)/1000);if(elapsed>=duration){finish();return}paint()}
   function stopTimer(){running=false;clearInterval(interval);interval=null}
-  function finish(){stopTimer();elapsed=duration;finished=true;pearlCount++;$('pearls').textContent=pearlCount;try{localStorage.setItem('sirenBrushPearls',String(pearlCount))}catch(e){}paint();chirp(true);vibrate();$('rewardBadge').textContent='✧ 第 '+pearlCount+' 颗小珍珠入袋 ✧';$('specks').innerHTML='';const symbols=['✦','✧','♡','🫧','⋆','✿'];for(let i=0;i<24;i++){const sp=document.createElement('span');sp.className='speck';sp.textContent=symbols[i%symbols.length];sp.style.left=((i*41+17)%100)+'%';sp.style.animationDelay=(-((i*37)%29)/10)+'s';sp.style.animationDuration=(2+(i%5)*.34)+'s';sp.style.color=i%2?'#83acc3':'#d59cb3';$('specks').appendChild(sp)}$('celebrate').classList.add('show');$('celebrate').setAttribute('aria-hidden','false')}
+  function finish(){stopTimer();elapsed=duration;finished=true;pearlCount++;$('pearls').textContent=pearlCount;try{localStorage.setItem('sirenBrushPearls',String(pearlCount))}catch(e){}paint();chirp(true);vibrate();$('rewardBadge').textContent='✧ 第 '+pearlCount+' 颗小珍珠入袋 ✧';$('specks').innerHTML='';const symbols=['✦','✧','♡','🫧','⋆','✿'];for(let i=0;i<24;i++){const sp=document.createElement('span');sp.className='speck';sp.textContent=symbols[i%symbols.length];sp.style.left=((i*41+17)%100)+'%';sp.style.animationDelay=(-((i*37)%29)/10)+'s';sp.style.animationDuration=(2+(i%5)*.34)+'s';sp.style.color=i%2?'#83acc3':'#d59cb3';$('specks').appendChild(sp)}$('celebrate').classList.add('show');$('celebrate').setAttribute('aria-hidden','false');$('again').focus()}
   function restart(){stopTimer();finished=false;elapsed=0;lastStage=-1;$('celebrate').classList.remove('show');$('celebrate').setAttribute('aria-hidden','true');paint()}
   $('start').addEventListener('click',()=>{if(finished)return;if(running){tick();stopTimer();paint()}else{running=true;startTime=performance.now()-elapsed*1000;lastStage=Math.floor(elapsed/(duration/4));if(elapsed===0)lastStage=-1;interval=setInterval(tick,100);chirp();paint()}});
-  $('reset').addEventListener('click',restart);$('again').addEventListener('click',restart);
+  $('reset').addEventListener('click',restart);$('again').addEventListener('click',()=>{restart();$('start').focus()});
   $('two').addEventListener('click',()=>changeMode(120));$('three').addEventListener('click',()=>changeMode(180));
   function changeMode(s){duration=s;restart();$('two').classList.toggle('active',s===120);$('three').classList.toggle('active',s===180);$('two').setAttribute('aria-pressed',String(s===120));$('three').setAttribute('aria-pressed',String(s===180))}
   $('sound').addEventListener('click',()=>{muted=!muted;$('sound').textContent=muted?'🔕 声音关':'🔔 声音开';$('sound').setAttribute('aria-pressed',String(!muted));if(!muted)chirp()});
