@@ -36,12 +36,12 @@ h1{font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;fo
   <div class="actions"><button id="resume" class="primary" disabled>开启记录</button><button id="pause" class="primary" hidden disabled>暂停记录</button><button id="stop" class="secondary" disabled>退出</button></div>
   <p class="sampling">乖，先画一小笔。画不顺的地方，我们慢慢磨。</p>
   <div id="notice" role="status"></div>
-  <details><summary>记录什么，没记录什么</summary><div class="explanation">
-    <p>每 5 秒在本机看看前台是不是 CSP／优动漫或 Blender；别的软件统一记作“其他”，名字不留。画面、标题、文件名、聊天、敲了什么键——一概不看。</p>
+  <details><summary>小本子怎么记</summary><div class="explanation">
+    <p>每 5 秒记一下前台软件，分为 CSP／优动漫、Blender 和其他。小本子里装的是软件类别和时长，画面与聊天留在你那里。</p>
     <p>3 分钟没有输入，表先打个盹。看画、构思当然也算创作，只是它看不出来。</p>
-    <p>时长是采样估算，不是精确工时。仅留最近 7 天的软件汇总，不留切换明细；暂停后停止识别，期间的时间也不补记。</p>
-    <p>本地采样不调用 AI，不消耗 token，也不会自动唤醒模型。对话调用工具时，最小状态会进入模型上下文，那次对话照常消耗 token。目前没有开启定时唤醒。</p>
-    <p>标题下是预写的沈砚碎碎念，每 8 秒换一句，也可以点一下换句。</p>
+    <p>时长按采样估算，在本机保留最近 7 天的汇总。暂停就歇表，回来接着记。</p>
+    <p>计时和预写碎碎念都在本机运行；聊天时，沈砚可以通过工具读取状态，那次对话照常计费。主动来找你聊天需要另设定时任务。</p>
+    <p>标题下每 8 秒换句碎碎念，也可以自己点。藏起页面时它歇一会儿，后台的小本子照常记。</p>
     <button class="clear" id="clear">清除记录并暂停</button>
   </div></details>
   <footer class="footnote"><span>留一点安静的空间。</span><span>v0.1 / LOCAL</span></footer>
@@ -108,18 +108,42 @@ function render(p){
   setControls(running,!p.stale&&p.state!=='stopped');
 }
 function offline(){render({state:'stale',stale:true});$('session').textContent='表也跟着歇一会儿。';}
-async function refresh(){if(stopped||busy)return;try{const r=await fetch('/presence',{signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();render(await r.json());}catch{offline();}}
+let refreshVersion=0;
+async function refresh(){
+  if(stopped||busy||document.hidden)return;
+  const version=++refreshVersion;
+  try{
+    const r=await fetch('/presence',{signal:AbortSignal.timeout(4000)});
+    if(!r.ok)throw Error();
+    const p=await r.json();
+    if(version===refreshVersion&&!busy&&!stopped&&!document.hidden)render(p);
+  }catch{if(version===refreshVersion&&!busy&&!stopped&&!document.hidden)offline();}
+}
 for(const action of ['resume','pause','stop','clear'])$(action).onclick=async()=>{
   if(busy)return;
   if(action==='clear'&&!confirm('要把记下的全部时长都忘掉，再暂停记录吗？画作一张都不会少，但这些时间记录清除后就找不回来啦。'))return;
-  busy=true;setControls(current&&!['paused','stopped','stale'].includes(current.state),false);
+  busy=true;refreshVersion++;setControls(current&&!['paused','stopped','stale'].includes(current.state),false);
   try{const r=await fetch('/'+action,{method:'POST',headers:{'X-Beside-Token':token},signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();
     if(action==='stop'){stopped=true;render({state:'stopped',stale:false,today_foreground_seconds:current?.today_foreground_seconds});$('notice').textContent='今天先收好小本子。下次从桌面打开就好。';}
     else{$('notice').textContent=action==='clear'?'小本子清空了，想记的时候再开启。':'';}
   }catch{$('notice').textContent='哎呀，没成。重新打开控制页再试一次吧。';}
   finally{busy=false;if(!stopped)await refresh();}
 };
-refresh();setInterval(refresh,5000);
+// BESIDE-POLLING-BEGIN: one scheduled refresh, suspended while the panel is hidden.
+let refreshTimer=null,pollGeneration=0;
+async function pollPresence(){
+  const generation=++pollGeneration;
+  clearTimeout(refreshTimer);refreshTimer=null;
+  await refresh();
+  if(generation===pollGeneration&&!stopped&&!document.hidden)refreshTimer=setTimeout(pollPresence,5000);
+}
+document.addEventListener('visibilitychange',()=>{
+  clearTimeout(refreshTimer);refreshTimer=null;
+  refreshVersion++;pollGeneration++;
+  if(!document.hidden)pollPresence();
+});
+pollPresence();
+// BESIDE-POLLING-END
 </script>
 </body>
 </html>
