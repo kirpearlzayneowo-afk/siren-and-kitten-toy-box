@@ -43,6 +43,27 @@ const art=boot('catverse/index.html',JSON.stringify({xp:75,style:'hanfu',outfit:
 assert.match(art.node('content').innerHTML,/75 XP/);
 art.click('.nav',{tab:'closet'});
 assert.match(art.node('content').innerHTML,/雪夜观灯/);
+// Favorites survive reload, can be removed, and ignore unknown saved IDs.
+art.click('content',{'data-favorite-look':''});
+let saved=JSON.parse(art.storage.get('siren-catverse-v1'));
+assert.deepEqual(saved.favorites,['hanfu:1']);
+assert.equal(saved.xp,75);
+const closet=boot('catverse/index.html',JSON.stringify({...saved,favorites:['hanfu:1','hanfu:1','<img>','daily:99']}));
+closet.click('.nav',{tab:'closet'});
+assert.match(closet.node('content').innerHTML,/心爱的小衣架 · 1/);
+closet.click('content',{style:'daily'});
+closet.click('content',{look:'hanfu:1'});
+assert.match(closet.node('content').innerHTML,/雪夜观灯/);
+closet.click('content',{'data-favorite-look':''});
+assert.deepEqual(JSON.parse(closet.storage.get('siren-catverse-v1')).favorites,[]);
+for(let i=0;i<30;i++){
+  const before=JSON.parse(closet.storage.get('siren-catverse-v1'));
+  closet.click('content',{'data-pick-look':''});
+  const after=JSON.parse(closet.storage.get('siren-catverse-v1'));
+  assert.notEqual(after.style+':'+after.outfit,before.style+':'+before.outfit);
+  assert(['lolita','hanfu','daily'].includes(after.style));
+  assert(after.outfit>=0&&after.outfit<3);
+}
 // Both timer modes start in area 1, pause without counting, and award once.
 for (const seconds of [120,180]) {
   const app=boot('toothbrushing-planet/index.html');

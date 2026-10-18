@@ -36,7 +36,7 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--
 (function(){
 "use strict";
 const KEY="siren-catverse-v1";
-const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[]};
+const defaults={xp:0,claimed:{},style:"lolita",outfit:0,draws:0,lastCapsule:-1,charges:[],favorites:[]};
 let state={...defaults,claimed:{},charges:[]};
 // Keep the existing save key; validate only at the storage boundary.
 function integer(value,fallback=0){const n=Number(value);return Number.isSafeInteger(n)&&n>=0?n:fallback;}
@@ -50,6 +50,7 @@ try{
     state.lastCapsule=integer(saved.lastCapsule,-1);
     state.claimed=Object.fromEntries(["face","skull","doodle"].filter(id=>typeof saved.claimed?.[id]==="string").map(id=>[id,saved.claimed[id]]));
     state.charges=[...new Set(Array.isArray(saved.charges)?saved.charges.filter(id=>["hug","kiss","blanket"].includes(id)):[])];
+    state.favorites=Array.isArray(saved.favorites)?saved.favorites:[];
   }
 }catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){document.querySelector(".footer").textContent="浏览器不允许保存数据；当前页面可以玩，但刷新后进度可能丢失。";}}
@@ -58,6 +59,10 @@ const clothes={
 lolita:[["🎀","暮色茶会","雾蓝 · 奶油白 · 灰粉","复古洋装 + 蕾丝衬衫 + 小皮鞋","茶还没泡好，先替你把背后的蝴蝶结系上。"],["🍓","山楂奶霜","莓粉 · 燕麦白 · 深棕","高腰裙 + 灯笼袖 + 丝绒发饰","今天像一颗草莓奶糖。发饰歪了？别动，我来。"],["🦢","月光标本","银灰 · 灰蓝 · 珍珠白","长裙 + 珍珠发夹 + 短披肩","月亮借你一身银白，我负责拎裙摆。"]],
 hanfu:[["🌸","春日游园","藕粉 · 浅竹青","交领上衣 + 长裙 + 素色发簪","发簪插好了。走，趁花还没谢，出去晃一圈。"],["🏮","雪夜观灯","黛蓝 · 霜白","明制袄裙 + 披风 + 绒花","你提灯，我替你拢披风。前面那摊糖葫芦也去看看。"],["🪷","烟雨入画","月白 · 青灰","素色长衫 + 百迭裙 + 银饰","伞往你那边偏一点。衣角沾的雨，回家再慢慢晾。"]],
 daily:[["📚","书店逃跑计划","米白 · 浅棕 · 雾蓝","宽松针织衫 + 半裙 + 软底鞋","说好只逛十分钟。嗯，这一摞也给我抱。"],["🐈","小猫出街","奶灰 · 藕粉","短外套 + 直筒裤 + 小挎包","口袋里有糖，身边有我。今天准备去哪儿闯祸？"],["☁️","宅家创作日","奶白 · 灰蓝","宽大上衣 + 软裤 + 厚袜子","袖口卷一点，别蹭到笔。画累了，厚袜子伸过来暖着。"]]};
+const wardrobe=Object.entries(clothes).flatMap(([style,looks])=>looks.map((look,index)=>({id:style+":"+index,style,index,look})));
+state.favorites=wardrobe.filter(item=>state.favorites.includes(item.id)).map(item=>item.id);
+function currentLookId(){return state.style+":"+state.outfit;}
+function openLook(item){state.style=item.style;state.outfit=item.index;save();render();}
 const capsules=[
 ["💌","沈砚的私信","无限次拥抱券","有效期：不限。使用限制：没有。♡"],
 ["⭐","闪亮收藏","今天的小猫很勇敢","愿意重新拿起画笔，就值得庆祝。"],
@@ -91,8 +96,12 @@ if(!Object.hasOwn(clothes,state.style))state.style="lolita";
 const looks=clothes[state.style];
 state.outfit=((integer(state.outfit)%looks.length)+looks.length)%looks.length;
 const o=clothes[state.style][state.outfit];
+const favorite=state.favorites.includes(currentLookId());
 $("content").innerHTML='<h2>电子衣柜 · 穿搭灵感</h2><p class="note">猫猫，过来试这套。裙摆转一下，我看看。</p><div class="pillrow">'+[["lolita","Lolita"],["hanfu","汉服"],["daily","日常"]].map(s=>'<button type="button" class="pill '+(state.style===s[0]?"active":"")+'" data-style="'+s[0]+'">'+s[1]+'</button>').join("")+'</div>'+
-'<div class="outfit"><div class="big">'+o[0]+'</div><div class="tag">LOOK '+String(state.outfit+1).padStart(2,"0")+'</div><h3>'+o[1]+'</h3><p class="tag">'+o[2]+'</p><p class="description">'+o[3]+'</p><p class="description">'+o[4]+'</p><div class="controls"><button type="button" class="action secondary" data-move="-1">‹ 上一套</button><span class="small">'+(state.outfit+1)+' / '+looks.length+'</span><button type="button" class="action secondary" data-move="1">下一套 ›</button></div></div>';
+'<button type="button" class="action secondary" id="pick-look" data-pick-look>✧ 今天穿什么？</button>'+
+'<div class="outfit"><div class="big">'+o[0]+'</div><div class="tag">LOOK '+String(state.outfit+1).padStart(2,"0")+'</div><h3>'+o[1]+'</h3><p class="tag">'+o[2]+'</p><p class="description">'+o[3]+'</p><p class="description">'+o[4]+'</p><button type="button" class="pill '+(favorite?'active':'')+'" id="favorite-look" data-favorite-look aria-pressed="'+favorite+'">'+(favorite?'♥ 已挂进心爱的小衣架':'♡ 挂进心爱的小衣架')+'</button><div class="controls"><button type="button" class="action secondary" data-move="-1">‹ 上一套</button><span class="small">'+(state.outfit+1)+' / '+looks.length+'</span><button type="button" class="action secondary" data-move="1">下一套 ›</button></div></div>'+
+'<section aria-label="心爱的小衣架"><h3>心爱的小衣架 · '+state.favorites.length+'</h3>'+
+(state.favorites.length?'<div class="pillrow">'+wardrobe.filter(item=>state.favorites.includes(item.id)).map(item=>'<button type="button" class="pill" data-look="'+item.id+'">'+item.look[0]+' '+item.look[1]+'</button>').join('')+'</div><p class="small">点名字再试一次。想腾个位置，就点亮着的那颗心。</p>':'<p class="small">看中哪套就挂过来，下次一眼找到。</p>')+'</section>';
 }
 function renderGacha(){
 const c=capsules[state.lastCapsule];
@@ -108,6 +117,17 @@ const b=e.target.closest("button");if(!b)return;
 if(b.dataset.claim){const t=tasks.find(x=>x.id===b.dataset.claim);if(t&&state.claimed[t.id]!==today()){state.claimed[t.id]=today();state.xp=Math.max(0,Number(state.xp)||0)+t.xp;save();render();}}
 else if(b.dataset.style){state.style=b.dataset.style;state.outfit=0;save();render();}
 else if(b.dataset.move){state.outfit=(state.outfit+Number(b.dataset.move)+clothes[state.style].length)%clothes[state.style].length;save();render();}
+else if(b.hasAttribute("data-pick-look")){
+  const choices=wardrobe.filter(item=>item.id!==currentLookId());
+  openLook(choices[Math.floor(Math.random()*choices.length)]);
+  $("pick-look").focus();
+}
+else if(b.hasAttribute("data-favorite-look")){
+  const id=currentLookId();
+  state.favorites=state.favorites.includes(id)?state.favorites.filter(value=>value!==id):[...state.favorites,id];
+  save();render();$("favorite-look").focus();
+}
+else if(b.dataset.look){const item=wardrobe.find(item=>item.id===b.dataset.look);if(item)openLook(item);}
 else if(b.hasAttribute("data-gacha")){let r;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0]/4294967296;}catch(e){r=Math.random();}let next=Math.floor(r*capsules.length);if(next===state.lastCapsule)next=(next+1)%capsules.length;state.lastCapsule=next;state.draws=(Number(state.draws)||0)+1;save();render();}
 else if(b.dataset.charge){if(!state.charges.includes(b.dataset.charge))state.charges.push(b.dataset.charge);save();render();const box=$("sleep-message");if(box&&state.charges.length!==3)box.textContent=sleepy[b.dataset.charge];}
 else if(b.hasAttribute("data-reset-sleep")){state.charges=[];save();render();}
