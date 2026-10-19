@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#152f38"><title>退潮以后，请勿认领</title>
+<style>
+:root{color-scheme:dark;--ink:#e6e6d8;--muted:#acbfc0;--gold:#e3c28c}*{box-sizing:border-box}body{margin:0;color:var(--ink);font:16px/1.9 system-ui,"Microsoft YaHei",sans-serif;background:radial-gradient(ellipse at 85% 0,#37656870,transparent 60%),#152f38}main{max-width:820px;margin:auto;padding:32px 24px 64px}a{color:var(--muted);text-underline-offset:5px}.tag{font-size:12px;letter-spacing:.2em;color:var(--gold)}header{padding:66px 0 38px}h1{font:clamp(32px,7vw,55px)/1.4 Georgia,"Songti SC",serif;letter-spacing:.05em;margin:15px 0}p{margin:12px 0}.lede{color:var(--muted);max-width:540px}.notice{margin:30px 0;padding:24px;border:1px solid #b7cec435;transform:rotate(-1deg);background:#e9e0c6;color:#33484b;box-shadow:5px 8px 0 #081d2430}.notice small{letter-spacing:.15em}.notice blockquote{font:24px/1.8 "Songti SC",serif;margin:15px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}section{border-top:1px solid #aec9c436;padding-top:18px}h2{font-size:18px}button{font:inherit;cursor:pointer;border:1px solid #e3c28c88;border-radius:8px;background:#e3c28c;color:#233e44;padding:9px 20px}button:hover{filter:brightness(1.08)}button:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:5px}output{display:block;font:40px/1.5 Georgia,serif;color:var(--gold);margin:10px 0;min-height:60px}.muted,details,footer{color:var(--muted);font-size:14px}summary{cursor:pointer;color:var(--ink)}ol{padding-left:22px}#history{padding-left:20px;font-size:13px;color:var(--muted)}footer{margin-top:42px} @media(max-width:560px){header{padding-top:38px}.grid{grid-template-columns:1fr}main{padding:24px 20px 48px}}@media(prefers-reduced-motion:no-preference){.notice{animation:arrive .7s ease both}@keyframes arrive{from{opacity:0;transform:translateY(8px) rotate(-1deg)}to{opacity:1;transform:rotate(-1deg)}}}
+</style>
+</head>
+<body><main>
+<nav><a href="../index.html">← 回玩具箱</a></nav>
+<header><div class="tag">雾汀镇 · 双人冒险 · 第一封邀请</div><h1>退潮以后，<br>请勿认领。</h1><p class="lede">海会把丢掉的东西送回来。<br>只是柜台后的人，从来不问你准备好没有。</p></header>
+<article class="notice"><small>失物招领 / 尚未登记</small><blockquote>此人尚未遗失，<br>请勿提前归还。</blockquote><p>你翻过那幅画像。纸上的人，长着你的脸。</p></article>
+<div class="grid"><section><h2>猫猫先坐这儿</h2><p>一支铅笔、一把湿伞，还有一个替你举灯的同行人。我们从一间小小的失物招领所开始。</p><p class="muted">这是跑团的小桌面。回到聊天里对沈砚说「去雾汀镇」，一起确认人物后开场。故事不会在网页里自动播放。</p><details><summary>第一次怎么玩？</summary><ol><li>你说想做什么，也可以先问眼前有什么。</li><li>沈砚描述世界的回应。有风险时，先说清难度与可能的后果。</li><li>需要时掷 d20，加上角色的相关加值，达到难度就成功。</li><li>换办法、找人帮忙、歇一会儿，都由你决定。</li></ol><p>使用原创入门轻规则。容易 10、一般 13、困难 16；人物卡开场再一起定。想暂停就直接说。</p></details></section>
+<section><h2>借海风掷一颗骰子</h2><p class="muted">主持人请你掷的时候再用。这里显示原始点数，角色加值在聊天里计算。</p><button type="button" id="roll">掷 d20</button><output id="result" aria-live="polite">—</output><ol id="history" aria-label="本页最近投掷"></ol><p class="muted">只留本页最近 12 次。重要骰点让沈砚记进冒险存档。</p></section></div>
+<footer>猫猫 × 沈砚 · 谜底藏好了，路还等你来走。<br><a href="./README.md">玩法与参考资料</a></footer>
+</main><script>
+'use strict';
+const result=document.getElementById('result');
+const history=document.getElementById('history');
+const rolls=[];
+document.getElementById('roll').addEventListener('click',()=>{
+  if(!globalThis.crypto?.getRandomValues){result.textContent='骰子暂时借不到海风，请在聊天里掷。';return;}
+  const draw=new Uint32Array(1);
+  // Reject the incomplete tail so each of the twenty faces has equal probability.
+  const limit=4294967280;
+  do{crypto.getRandomValues(draw);}while(draw[0]>=limit);
+  const value=draw[0]%20+1;
+  result.textContent=String(value);
+  rolls.unshift(value);rolls.length=Math.min(rolls.length,12);
+  history.replaceChildren(...rolls.map((n,i)=>{const li=document.createElement('li');li.textContent=(i===0?'刚刚':'往前 '+i+' 次')+' · '+n;return li;}));
+});
+</script></body></html>

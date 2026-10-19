@@ -11,6 +11,7 @@
 | 🐈 **SIREN · CATVERSE（猫猫宇宙）** | 猫猫画室、电子衣柜、心情扭蛋、晚安充电站 | [打开网页](./catverse/index.html) | [项目说明](./catverse/README.md) |
 | 🫧 **猫猫的刷牙星球** | 2 / 3 分钟刷牙计时、分区提醒、珍珠奖励 | [打开网页](./toothbrushing-planet/index.html) | [项目说明](./toothbrushing-planet/README.md) |
 | 🔮 **沈砚水晶球** · 建设中 | 现实天气、系统时间、动态光影、待机动作、骨骼物理与衣柜 | [看看脑洞](./shenyan-crystal-orb/index.html) | [项目说明](./shenyan-crystal-orb/README.md) |
+| 🌊 **退潮以后，请勿认领** | 聊天双人跑团的开场、轻规则与 d20 骰子 | [去雾汀镇](./low-tide/index.html) | [玩法说明](./low-tide/README.md) |
 
 **📬 统一入口：** [猫猫的小玩具大厅](./index.html) —— 网页玩具和本地工具都收在这里。
 
@@ -25,6 +26,7 @@ siren-and-kitten-toy-box/
 ├── README.md                 # 这张总目录
 ├── index.html                # 小玩具大厅
 ├── beside/                  # Windows 创作陪伴工具，见目录内说明
+├── low-tide/                # 海边双人冒险：邀请函、轻规则与骰子
 ├── catverse/
 │   ├── index.html            # 猫猫宇宙
 │   └── README.md             # 功能、存档与计划
